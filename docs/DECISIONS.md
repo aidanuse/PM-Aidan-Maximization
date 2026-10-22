@@ -9,5 +9,6 @@
 - Missing-detail follow-up texts should send automatically once recipient, rules and provider are configured. User can preview, pause and revise these rules.
 - New hosting setup requested; no existing hosting account or domain was supplied.
 - Source and behavior should remain editable for future fixes and refinements.
+- After Render required a card, the user requested free hosting and authorized Cloudflare adaptation. The app uses Workers static assets plus a SQLite-backed Durable Object on the Workers Free plan. It preserves transaction accounting without a separate D1 database. No paid hosting subscription or SMS service has been purchased.
 
 No historical job, old inventory balance, product threshold, crew availability, or old automation from the handoff PDF has been treated as verified current data. No live recipient phone numbers or provider credentials have been supplied.

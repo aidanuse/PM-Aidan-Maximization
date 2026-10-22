@@ -1,5 +1,7 @@
 # New hosting setup for HARDBOND
 
+**For the requested free hosting route, use [Cloudflare setup](CLOUDFLARE.md).** This page describes the optional paid Node/Render route. Do not deploy the original filesystem SQLite backend on ephemeral free Render storage: records can be lost on restarts/redeploys and a sleeping server cannot run reliable scheduled tasks.
+
 The recommended first release is an always-on Render web service with a persistent disk. Render supplies an HTTPS `onrender.com` address, so a custom domain is optional. A paid always-on service and disk may incur charges: review the provider's current price before creating them. This guide and blueprint do not purchase, create, or publish any service.
 
 ## 1. Create the host

@@ -45,13 +45,17 @@ The browser test uses Python Playwright and `/usr/bin/chromium` (or `CHROMIUM_PA
 
 ## Deploy and install
 
-See [new hosting setup](docs/DEPLOYMENT.md) and [iPhone installation](docs/IPHONE.md). A managed Render blueprint (`render.yaml`) and an alternative Docker/Caddy setup are included. Hosting signup/billing and external account connections are not performed by these files. No production URL is assumed.
+Use [free Cloudflare hosting](docs/CLOUDFLARE.md), then follow [iPhone installation](docs/IPHONE.md). The Worker serves the app and API, stores records in a persistent SQLite-backed Durable Object, and runs scheduled checks every minute. Free usage limits apply; SMS provider charges are separate. Account connection, production deployment and real phone delivery still need to be completed. The [paid Node hosting alternatives](docs/DEPLOYMENT.md) remain available.
+
+Cloudflare development: `npm run build`, configure an ignored `.dev.vars` using `.dev.vars.example`, then `npm run dev:cloudflare`. Run `npm run test:cloudflare` for the real local runtime checks and `npm run check:cloudflare` for a packaging dry run. Node and Cloudflare use the same validated record/inventory rules.
 
 ## Change and maintain it
 
 - `src/App.jsx`: app shell, jobs, daily entry, settings.
 - `src/Operations.jsx`: inventory, load checks, calendar, follow-ups, actions, analysis, reminders.
-- `server/store.js`: validated records, stock accounting, backup/restore.
+- `server/store-core.js`: shared validated records, stock accounting, backup/restore; `server/store.js` supplies local Node SQLite.
+- `cloudflare/worker.js`, `cloudflare/database.js`: Cloudflare login, routing, durable SQLite and scheduled automation.
+- `wrangler.jsonc`: free-plan-compatible Cloudflare deployment, bindings, migrations and Cron Trigger.
 - `server/integrations.js`: scheduled push/SMS and calendar files.
 - `server/calendar-feed.js`: read-only phone subscription.
 - `src/api.js`, `public/sw.js`: offline queue, caching, phone push.

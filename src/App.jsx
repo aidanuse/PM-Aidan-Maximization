@@ -281,7 +281,10 @@ export default function App() {
       return;
     try {
       await request("/api/auth/logout", { method: "POST" });
-    } catch {}
+    } catch (error) {
+      toast(`Could not sign out: ${error.message}`, "error");
+      return;
+    }
     clearLocalData();
     setState(blankState);
     setAuth({ configured: true, authenticated: false });

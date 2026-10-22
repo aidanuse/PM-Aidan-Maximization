@@ -9,14 +9,18 @@ with tempfile.TemporaryDirectory(prefix='hardbond-browser-') as data:
     env={**os.environ,'NODE_ENV':'test','OWNER_PASSWORD':password,'PORT':str(port),'HOST':'127.0.0.1','DATA_DIR':data,'PUBLIC_URL':'https://hardbond.example.test'}
     for key in ['TWILIO_ACCOUNT_SID','TWILIO_AUTH_TOKEN','TWILIO_FROM_NUMBER']:env.pop(key,None)
     log=open(Path(data)/'server.log','w')
-    server=subprocess.Popen(['node','server/index.js'],cwd=ROOT,env=env,stdout=log,stderr=log)
+    runtime=os.environ.get('HARDBOND_BROWSER_RUNTIME','node')
+    entry='tests/cloudflare-browser-server.mjs' if runtime=='cloudflare' else 'server/index.js'
+    server=subprocess.Popen(['node',entry],cwd=ROOT,env=env,stdout=log,stderr=log)
     base=f'http://127.0.0.1:{port}'
     try:
-        for _ in range(80):
+        for _ in range(200):
             try:
                 urllib.request.urlopen(base+'/api/health');break
             except Exception:time.sleep(.1)
-        else:raise RuntimeError('Test server did not start')
+        else:
+            log.flush()
+            raise RuntimeError('Test server did not start: '+(Path(data)/'server.log').read_text())
         with sync_playwright() as p:
             browser=p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),headless=True,args=['--no-sandbox'])
             context=browser.new_context(viewport={'width':1440,'height':1000},timezone_id='America/Toronto')

@@ -999,8 +999,8 @@ export function exportCalendar(records, id) {
   return calendar.toString();
 }
 
-export function registerIntegrations(app, context) {
-  const service = createIntegrationService(context);
+export function registerIntegrations(app, context, options = {}) {
+  const service = options.service || createIntegrationService(context);
   const auth = context.requireAuth;
   const route = (handler) => async (req, res, next) => {
     try {
@@ -1056,6 +1056,13 @@ export function registerIntegrations(app, context) {
         .send(service.exportCalendar(req.query.id));
     }),
   );
+  // Cloudflare invokes the same service from a Cron Trigger, without process timers.
+  if (options.schedule === false) {
+    const cleanup = () => {};
+    cleanup.status = service.status;
+    cleanup.service = service;
+    return cleanup;
+  }
   const timer = setInterval(() => {
     void service.runOnce();
   }, 30_000);

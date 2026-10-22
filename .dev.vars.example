@@ -1,0 +1,7 @@
+# Local Cloudflare development only. Copy to ignored .dev.vars and replace privately.
+OWNER_PASSWORD=""
+# Optional: PUBLIC_URL="https://hardbond-command.YOUR-SUBDOMAIN.workers.dev"
+# Twilio remains optional and may charge separately. Enable only after recipient review.
+# TWILIO_ACCOUNT_SID=""
+# TWILIO_AUTH_TOKEN=""
+# TWILIO_FROM_NUMBER=""

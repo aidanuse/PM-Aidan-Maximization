@@ -1,4 +1,15 @@
-# Build status — 2026-10-19
+# Build status
+
+## Cloudflare adaptation
+
+The free hosting route now uses Workers static assets and API routing, one persistent SQLite-backed Durable Object, and a once-per-minute Cron Trigger. The shared domain store preserves inventory accounting and backup compatibility; the Node/Render route remains optional. Worker login uses a runtime owner secret, native constant-time HMAC verification, signed revocable sessions and persistent rate limiting. No password verifier is stored in the Worker database. Private VAPID keys persist inside the workspace, and encrypted Web Push uses Workers fetch. No filesystem disk or sleeping process is required.
+
+Cloudflare-specific validation:
+
+- Two local Cloudflare runtime scenarios pass: authenticated records, idempotent consumption/corrections/conflicts, scheduled expiry, persistent keys/calendar links and records across runtime restarts, session invalidation on password change, logout and rate limiting; plus actual SQLite rollback and encrypted push generation with a simulated transport. The encrypted payload was decrypted with the test receiver key to verify compatibility. No provider network send occurred.
+- The full Chromium browser workflow passes against the Cloudflare backend, including offline save/sync/reopen, mobile layout and server-confirmed logout.
+- Cloudflare packaging dry run passes. Real account authentication, deployment, free-tier behavior under load and physical-device delivery are still unverified. A local runtime does not enforce every production quota.
+- Follow [Cloudflare deployment](CLOUDFLARE.md) for the current requested route. The previous Render free-tier suggestion did not provide durable storage or reliable scheduling and is not the recommended deployment.
 
 ## Implemented and locally exercised
 
@@ -21,11 +32,11 @@ Daily Sheets connect actual consumption to inventory and tomorrow's needs to con
 - Real Twilio account/sender setup, recipient numbers, and SMS delivery.
 - iPhone Calendar's refresh behavior with the deployed private feed.
 - Live TimeTree read/write access. No live adapter exists in this version; supported workflows are manual job entry and ICS files when available.
-- Docker deployment has been prepared but not exercised; managed Node hosting is the recommended route.
+- Docker deployment has been prepared but not exercised; Cloudflare is the requested first-launch route.
 
 ## Remaining first-launch steps
 
-Create the new hosting account, connect this repository, review the always-on plan/disk cost, set the owner password securely, and deploy the supplied blueprint. Install from Safari, connect notifications, then configure SMS credentials and confirmed recipient numbers. Follow docs/DEPLOYMENT.md and docs/IPHONE.md. Keep automation paused until its preview and real delivery are checked.
+Create a free Cloudflare account, connect this repository as a Worker, use build `npm run build` and deploy `npx wrangler deploy`, and set `OWNER_PASSWORD` as a private runtime secret. Install from Safari and test a reminder with the app closed. Configure the optional SMS provider and confirmed recipient numbers afterward; SMS may have separate costs. Follow docs/CLOUDFLARE.md and docs/IPHONE.md. Keep text automation paused until its preview and real delivery are checked.
 
 ## Planned subsequent iterations
 
