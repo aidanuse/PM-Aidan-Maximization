@@ -2261,6 +2261,12 @@ export function RemindersView({ state, onSave, onDelete, toast, onNavigate }) {
   const [draft, setDraft] = useState(null),
     [filter, setFilter] = useState("pending");
   const { busy, error, setError, save } = useSave(onSave, toast);
+  const delivery = useIntegrationData(["/api/integrations/delivery-log"]);
+  const attempts = (
+    delivery.data["/api/integrations/delivery-log"]?.entries || []
+  )
+    .filter((entry) => entry.channel === "push")
+    .slice(0, 5);
   const reminders = [...(state.reminders || [])].sort((a, b) =>
     (a.dueAt || "z").localeCompare(b.dueAt || "z"),
   );
@@ -2291,6 +2297,45 @@ export function RemindersView({ state, onSave, onDelete, toast, onNavigate }) {
           <Plus size={17} /> Add reminder
         </button>
       </Heading>
+      <section className="card stack">
+        <div className="ops-card-top">
+          <h3>Notification delivery</h3>
+          <button
+            className="btn"
+            onClick={delivery.refresh}
+            disabled={delivery.loading}
+          >
+            Refresh delivery status
+          </button>
+        </div>
+        <p className="muted">
+          Device registration does not confirm delivery. A failed attempt can
+          leave a reminder Pending; check its result here before rescheduling.
+        </p>
+        {delivery.error && (
+          <p role="alert" className="error">
+            {delivery.error}
+          </p>
+        )}
+        {!delivery.loading && !delivery.error && !attempts.length && (
+          <p>No notification attempts recorded yet.</p>
+        )}
+        {attempts.map((entry) => (
+          <div key={entry.id}>
+            <strong>
+              {state.reminders.find(
+                (reminder) => reminder.id === entry.sourceId,
+              )?.title || "Reminder"}{" "}
+              ·{" "}
+              {entry.status === "accepted"
+                ? "Push service accepted"
+                : entry.status}
+            </strong>
+            <p className="muted ops-small">{humanTime(entry.createdAt)}</p>
+            <p>{entry.detail}</p>
+          </div>
+        ))}
+      </section>
       <div className="ops-callout">
         <Bell size={21} />
         <div>

@@ -1,5 +1,11 @@
 # Build status
 
+## Notification delivery troubleshooting
+
+Reported production logs show failed push attempts, confirming the scheduler ran but not establishing why no provider accepted them. New attempts now retain a safe provider HTTP status/recognized reason code or a preparation/timeout classification. Raw provider bodies and credentials are not saved. Reminders displays the recent notification delivery history with a refresh button. Enabling notifications compares the browser subscription's key with the current server key and replaces a mismatched subscription. This fixes a real stale-key path but does not establish that it caused the reported production failures.
+
+Validation: 27 Node tests and two Cloudflare runtime scenarios passed, including provider reason redaction, encrypted transport, subscription-key matching/replacement, and no duplicate automatic retry. The Cloudflare browser workflow passed. The owner must deploy this update, re-enable notifications and create a new test reminder to verify real iPhone delivery; existing generic error entries cannot reveal their original provider reason.
+
 ## Cloudflare adaptation
 
 The free hosting route now uses Workers static assets and API routing, one persistent SQLite-backed Durable Object, and a once-per-minute Cron Trigger. The shared domain store preserves inventory accounting and backup compatibility; the Node/Render route remains optional. Worker login uses a runtime owner secret, native constant-time HMAC verification, signed revocable sessions and persistent rate limiting. No password verifier is stored in the Worker database. Private VAPID keys persist inside the workspace, and encrypted Web Push uses Workers fetch. No filesystem disk or sleeping process is required.

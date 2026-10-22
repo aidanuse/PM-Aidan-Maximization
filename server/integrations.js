@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import ICAL from "ical.js";
 import webpush from "web-push";
+import { pushFailureDetail } from "./push-errors.js";
 
 const FIELD_LABELS = {
   phone: "client phone",
@@ -549,6 +550,7 @@ export function createIntegrationService(context, options = {}) {
       );
       let accepted = 0;
       let gone = 0;
+      const failures = new Set();
       for (const row of subscriptions) {
         try {
           await pushSend(
@@ -570,6 +572,7 @@ export function createIntegrationService(context, options = {}) {
           );
           accepted += 1;
         } catch (error) {
+          failures.add(pushFailureDetail(error));
           if (error.statusCode === 404 || error.statusCode === 410) {
             db.prepare(
               "DELETE FROM integration_subscriptions WHERE endpoint=?",
@@ -579,9 +582,10 @@ export function createIntegrationService(context, options = {}) {
         }
       }
       const deliveryStatus = accepted ? "accepted" : "failed";
-      const detail = accepted
+      const summary = accepted
         ? `Push service accepted ${accepted} of ${subscriptions.length} subscription(s). Phone receipt is not confirmed.`
         : `No push service accepted the reminder. ${gone} expired subscription(s) removed. Open the reminder to reschedule; no automatic duplicate send.`;
+      const detail = `${summary}${failures.size ? " " + [...failures].slice(0, 3).join(" ") : ""}`;
       db.prepare(
         "UPDATE integration_deliveries SET status=?,detail=? WHERE id=?",
       ).run(deliveryStatus, detail, deliveryId);

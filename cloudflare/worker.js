@@ -12,6 +12,7 @@ import {
 import { registerCalendarFeed } from "../server/calendar-feed.js";
 import { durableDatabase } from "./database.js";
 import { Router } from "./router.js";
+import { providerReason } from "../server/push-errors.js";
 
 const encoder = new TextEncoder();
 const cookieName = "hardbond_session";
@@ -78,11 +79,13 @@ export async function sendPush(
   options,
   fetcher = fetch,
 ) {
-  const details = webpush.generateRequestDetails(
-    subscription,
-    payload,
-    options,
-  );
+  let details;
+  try {
+    details = webpush.generateRequestDetails(subscription, payload, options);
+  } catch (error) {
+    error.pushStage = "prepare";
+    throw error;
+  }
   const headers = new Headers(details.headers);
   headers.delete("Content-Length");
   const response = await fetcher(details.endpoint, {
@@ -92,11 +95,32 @@ export async function sendPush(
     redirect: "error",
     signal: AbortSignal.timeout(15000),
   });
-  await response.arrayBuffer();
-  if (!response.ok)
+  if (!response.ok) {
+    // Limit diagnostic data and expose only a recognized provider reason code.
+    let body = "";
+    if (response.body) {
+      const reader = response.body.getReader();
+      let size = 0;
+      try {
+        while (size < 8192) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const part = value.subarray(0, 8192 - size);
+          size += part.length;
+          body += new TextDecoder().decode(part);
+        }
+      } catch {
+        /* Preserve the HTTP status even if its body is interrupted. */
+      } finally {
+        await reader.cancel().catch(() => {});
+      }
+    }
     throw Object.assign(new Error("Push provider rejected request."), {
       statusCode: response.status,
+      providerReason: providerReason(body),
     });
+  }
+  await response.body?.cancel().catch(() => {});
 }
 
 export class HardbondWorkspace extends DurableObject {
@@ -229,11 +253,9 @@ export class HardbondWorkspace extends DurableObject {
     const auth = (_req, res, next) =>
       authenticated
         ? next()
-        : res
-            .status(401)
-            .json({
-              error: "Sign in to access your private HARDBOND workspace.",
-            });
+        : res.status(401).json({
+            error: "Sign in to access your private HARDBOND workspace.",
+          });
     router.get("/api/health", (_req, res) =>
       res.json({ ok: true, app: "HARDBOND Command", runtime: "cloudflare" }),
     );
@@ -308,13 +330,11 @@ export class HardbondWorkspace extends DurableObject {
       res.json({ ...store.state(), integrations: {} }),
     );
     router.post("/api/records/:collection", auth, (req, res) =>
-      res
-        .status(201)
-        .json({
-          record: store.saveRecord(req.params.collection, req.body, {
-            createOnly: true,
-          }),
+      res.status(201).json({
+        record: store.saveRecord(req.params.collection, req.body, {
+          createOnly: true,
         }),
+      }),
     );
     router.put("/api/records/:collection/:id", auth, (req, res) => {
       if (req.body.id && req.body.id !== req.params.id)

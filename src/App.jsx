@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { currentPushSubscription } from "./push-subscription.js";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -1752,12 +1753,15 @@ function SettingsView({
       const applicationServerKey = Uint8Array.from(
         [...raw].map((c) => c.charCodeAt(0)),
       );
-      let subscription = await registration.pushManager.getSubscription();
-      if (!subscription)
-        subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey,
-        });
+      const subscription = await currentPushSubscription(
+        registration.pushManager,
+        applicationServerKey,
+        (endpoint) =>
+          request("/api/push/unsubscribe", {
+            method: "POST",
+            body: { endpoint },
+          }),
+      );
       await request("/api/push/subscribe", {
         method: "POST",
         body: JSON.stringify({ subscription }),

@@ -34,13 +34,14 @@ export default {
       payload,
       vapidDetails,
       status = 201,
+      providerBody = null,
     } = await request.json();
     let captured;
     try {
       await sendPush(
         subscription,
         payload,
-        { vapidDetails, TTL: 60 },
+        { vapidDetails, TTL: 60, timeout: 15000 },
         async (url, init) => {
           captured = {
             url,
@@ -48,12 +49,17 @@ export default {
             headers: Object.fromEntries(init.headers),
             body: Buffer.from(init.body).toString("base64"),
           };
-          return new Response(null, { status });
+          return new Response(providerBody, { status });
         },
       );
       return Response.json({ captured });
     } catch (error) {
-      return Response.json({ captured, statusCode: error.statusCode });
+      return Response.json({
+        captured,
+        statusCode: error.statusCode,
+        providerReason: error.providerReason,
+        pushStage: error.pushStage,
+      });
     }
   },
 };

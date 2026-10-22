@@ -1,3 +1,4 @@
+import { currentPushSubscription } from "./push-subscription.js";
 const PREFIX = "hardbond:v1:";
 const CACHE_KEY = `${PREFIX}state`;
 const QUEUE_KEY = `${PREFIX}outbox`;
@@ -413,12 +414,12 @@ export async function subscribePush() {
   const applicationServerKey = Uint8Array.from(atob(padded), (char) =>
     char.charCodeAt(0),
   );
-  const subscription =
-    (await registration.pushManager.getSubscription()) ||
-    (await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey,
-    }));
+  const subscription = await currentPushSubscription(
+    registration.pushManager,
+    applicationServerKey,
+    (endpoint) =>
+      request("/api/push/unsubscribe", { method: "POST", body: { endpoint } }),
+  );
   await request("/api/push/subscribe", {
     method: "POST",
     body: subscription.toJSON(),

@@ -342,11 +342,17 @@ test(
       subject: "https://hardbond.example.test",
       ...webpush.generateVAPIDKeys(),
     };
-    const send = async (status) => {
+    const send = async (status, providerBody = null) => {
       const result = await worker.fetch("/api/transport", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subscription, payload, vapidDetails, status }),
+        body: JSON.stringify({
+          subscription,
+          payload,
+          vapidDetails,
+          status,
+          providerBody,
+        }),
       });
       assert.equal(result.status, 200);
       return result.json();
@@ -367,5 +373,17 @@ test(
     );
     const gone = await send(410);
     assert.equal(gone.statusCode, 410);
+    const mismatch = await send(
+      403,
+      JSON.stringify({
+        reason: "VapidPkHashMismatch",
+        sensitive: "DO-NOT-LOG",
+      }),
+    );
+    assert.equal(mismatch.statusCode, 403);
+    assert.equal(mismatch.providerReason, "VapidPkHashMismatch");
+    assert.doesNotMatch(JSON.stringify(mismatch), /DO-NOT-LOG/);
+    const unknown = await send(400, JSON.stringify({ reason: "DO-NOT-LOG" }));
+    assert.equal(unknown.providerReason, null);
   },
 );

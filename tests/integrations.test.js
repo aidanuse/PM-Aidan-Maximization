@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createStore } from "../server/store.js";
+import { pushFailureDetail } from "../server/push-errors.js";
 import {
   createIntegrationService,
   buildFollowupPreview,
@@ -166,6 +167,54 @@ test("push accepts once, expires stale reminders and removes gone subscriptions 
   assert.equal(s.getRecord("reminders", "r").status, "sent");
   assert.equal(s.getRecord("reminders", "old").status, "expired");
 });
+test("push failure keeps safe provider reason and does not automatically retry", async (t) => {
+  let calls = 0;
+  const { s, i } = service(t, {
+    vapid: { ready: true, details: {} },
+    pushSend: async () => {
+      calls++;
+      throw Object.assign(new Error("SECRET should not be logged"), {
+        statusCode: 403,
+        body: JSON.stringify({
+          reason: "VapidPkHashMismatch",
+          secret: "SECRET",
+        }),
+      });
+    },
+  });
+  i.subscribe({
+    endpoint: "https://web.push.apple.com/test-only",
+    keys: { p256dh: "A".repeat(87), auth: "B".repeat(22) },
+  });
+  s.saveRecord("reminders", {
+    id: "rejected",
+    title: "TEST",
+    dueAt: "2026-10-19T23:00:00Z",
+  });
+  await i.runOnce();
+  await i.runOnce();
+  assert.equal(calls, 1);
+  assert.equal(s.getRecord("reminders", "rejected").status, "pending");
+  assert.match(i.deliveryLog()[0].detail, /HTTP 403 \(VapidPkHashMismatch\)/);
+  assert.doesNotMatch(i.deliveryLog()[0].detail, /SECRET|test-only/);
+  assert.doesNotMatch(
+    pushFailureDetail({
+      statusCode: 400,
+      body: '{"reason":"SECRET"}',
+      message: "SECRET",
+    }),
+    /SECRET/,
+  );
+  assert.match(
+    pushFailureDetail({ name: "TimeoutError" }),
+    /acceptance is unknown/,
+  );
+  assert.match(
+    pushFailureDetail({ pushStage: "prepare" }),
+    /encryption\/signing failed/,
+  );
+});
+
 test("unconfigured SMS performs no network requests", async (t) => {
   let calls = 0;
   const { s, i } = service(t, {
