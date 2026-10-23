@@ -48,6 +48,16 @@ export function initOneSignal() {
         window.dispatchEvent(new CustomEvent("hardbond:onesignal-ready"));
       } catch (error) {
         clearTimeout(timeout);
+        if (/already initialized/i.test(String(error?.message || error))) {
+          try {
+            await OneSignal.login(EXTERNAL_ID);
+            resolve(OneSignal);
+            window.dispatchEvent(new CustomEvent("hardbond:onesignal-ready"));
+            return;
+          } catch (loginError) {
+            error = loginError;
+          }
+        }
         ready = undefined;
         reject(error);
       }
