@@ -1832,6 +1832,11 @@ function SettingsView({
               <Bell size={17} />
               {pushBusy ? "Connecting…" : "Enable this device’s notifications"}
             </Button>
+            {error && (
+              <p className="error" role="alert">
+                {error}
+              </p>
+            )}
           </Card>
           <form onSubmit={submit} className="stack">
             <Card>

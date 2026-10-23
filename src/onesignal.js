@@ -10,6 +10,13 @@ function queue(callback) {
 export function initOneSignal() {
   if (ready || typeof window === "undefined") return ready;
   ready = new Promise((resolve, reject) => {
+    const timeout = setTimeout(
+      () => {
+        ready = undefined;
+        reject(new Error("OneSignal could not load. Check the HTTPS deployment and try again."));
+      },
+      10000,
+    );
     queue(async (OneSignal) => {
       try {
         await OneSignal.init({
@@ -18,9 +25,12 @@ export function initOneSignal() {
           serviceWorkerParam: { scope: "/push/onesignal/" },
         });
         await OneSignal.login(EXTERNAL_ID);
+        clearTimeout(timeout);
         resolve(OneSignal);
         window.dispatchEvent(new CustomEvent("hardbond:onesignal-ready"));
       } catch (error) {
+        clearTimeout(timeout);
+        ready = undefined;
         reject(error);
       }
     });
