@@ -39,7 +39,7 @@ export function initOneSignal() {
       try {
         await OneSignal.init({
           appId: APP_ID,
-          serviceWorkerPath: "/push/onesignal/OneSignalSDKWorker.js",
+          serviceWorkerPath: "push/onesignal/OneSignalSDKWorker.js",
           serviceWorkerParam: { scope: "/push/onesignal/" },
         });
         await OneSignal.login(EXTERNAL_ID);
@@ -72,11 +72,13 @@ export function initOneSignal() {
 
 export async function requestOneSignalPermission() {
   const OneSignal = await initOneSignal();
+  if (!OneSignal?.Notifications?.requestPermission)
+    throw new Error("OneSignal notifications are unavailable on this device.");
   await OneSignal.Notifications.requestPermission();
-  return OneSignal.User.PushSubscription.id || null;
+  return OneSignal.User?.PushSubscription?.id || null;
 }
 
 export async function oneSignalSubscriptionId() {
   const OneSignal = await initOneSignal();
-  return OneSignal.User.PushSubscription.id || null;
+  return OneSignal.User?.PushSubscription?.id || null;
 }
