@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { currentPushSubscription } from "./push-subscription.js";
+import { initOneSignal, requestOneSignalPermission } from "./onesignal.js";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -160,7 +160,8 @@ export default function App() {
     [fatal, setFatal] = useState(""),
     [toastValue, setToast] = useState(null),
     [queue, setQueue] = useState(getQueue()),
-    [syncing, setSyncing] = useState(false);
+    [syncing, setSyncing] = useState(false),
+    [oneSignalPrompt, setOneSignalPrompt] = useState(false);
   const toast = useCallback((message, tone = "success") => {
     setToast({ message, tone });
   }, []);
@@ -203,6 +204,16 @@ export default function App() {
       }
     })();
   }, [reload]);
+  useEffect(() => {
+    if (!auth?.authenticated || !import.meta.env.PROD) return;
+    const ready = () => {
+      if (localStorage.getItem("hardbond.onesignal.promptShown") !== "1")
+        setOneSignalPrompt(true);
+    };
+    window.addEventListener("hardbond:onesignal-ready", ready);
+    initOneSignal().then(ready).catch(() => {});
+    return () => window.removeEventListener("hardbond:onesignal-ready", ready);
+  }, [auth?.authenticated]);
   useEffect(() => {
     const changed = () => setQueue(getQueue());
     window.addEventListener("hardbond:queue", changed);
@@ -529,6 +540,35 @@ export default function App() {
             <X size={15} />
           </button>
         </div>
+      )}
+      {oneSignalPrompt && (
+        <Modal
+          title="Your OneSignal SDK integration is complete!"
+          onClose={() => {
+            localStorage.setItem("hardbond.onesignal.promptShown", "1");
+            setOneSignalPrompt(false);
+          }}
+        >
+          <p>
+            You can now send Push Notifications &amp; In-App Messages through
+            OneSignal. Tap below to enable push notifications.
+          </p>
+          <Button
+            kind="primary"
+            onClick={async () => {
+              localStorage.setItem("hardbond.onesignal.promptShown", "1");
+              setOneSignalPrompt(false);
+              try {
+                await requestOneSignalPermission();
+                toast("This device is registered for notifications.");
+              } catch (error) {
+                toast(errText(error), "warning");
+              }
+            }}
+          >
+            Got it
+          </Button>
+        </Modal>
       )}
     </div>
   );
@@ -1723,49 +1763,15 @@ function SettingsView({
     setPushBusy(true);
     setError("");
     try {
-      if (
-        !("Notification" in window) ||
-        !("serviceWorker" in navigator) ||
-        !("PushManager" in window)
-      )
-        throw new Error(
-          "Install this app on your iPhone Home Screen, open it there, and try again. Push needs iOS 16.4 or later and HTTPS.",
-        );
       if (!window.isSecureContext)
         throw new Error(
           "Notifications need this app to be hosted at its own HTTPS address.",
         );
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted")
+      const id = await requestOneSignalPermission();
+      if (!id)
         throw new Error(
-          "Notifications are not allowed. You can change this in your phone settings.",
+          "OneSignal did not register this device yet. Keep HARDBOND open and try again.",
         );
-      const registration = await navigator.serviceWorker.register("/sw.js");
-      await navigator.serviceWorker.ready;
-      const data = await request("/api/push/public-key");
-      if (!data.configured)
-        throw new Error(
-          data.error || "The push service is not configured on the server.",
-        );
-      const key = data.publicKey || data.key;
-      const padding = "=".repeat((4 - (key.length % 4)) % 4);
-      const raw = atob((key + padding).replace(/-/g, "+").replace(/_/g, "/"));
-      const applicationServerKey = Uint8Array.from(
-        [...raw].map((c) => c.charCodeAt(0)),
-      );
-      const subscription = await currentPushSubscription(
-        registration.pushManager,
-        applicationServerKey,
-        (endpoint) =>
-          request("/api/push/unsubscribe", {
-            method: "POST",
-            body: { endpoint },
-          }),
-      );
-      await request("/api/push/subscribe", {
-        method: "POST",
-        body: JSON.stringify({ subscription }),
-      });
       toast("This device is registered for notifications.");
       setStatus(await request("/api/integrations/status"));
     } catch (e) {

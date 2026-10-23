@@ -13,6 +13,7 @@ import { registerCalendarFeed } from "../server/calendar-feed.js";
 import { durableDatabase } from "./database.js";
 import { Router } from "./router.js";
 import { providerReason } from "../server/push-errors.js";
+import { createOneSignalSender } from "../server/onesignal.js";
 
 const encoder = new TextEncoder();
 const cookieName = "hardbond_session";
@@ -201,7 +202,15 @@ export class HardbondWorkspace extends DurableObject {
     }
     return createIntegrationService(
       { ...this.store, env: this.env, dataDir: "/unused" },
-      { vapid, pushSend: sendPush, env: this.env },
+      {
+        vapid,
+        pushSend: sendPush,
+        oneSignal: createOneSignalSender({
+          appId: this.env.ONESIGNAL_APP_ID,
+          apiKey: this.env.ONESIGNAL_REST_API_KEY,
+        }),
+        env: this.env,
+      },
     );
   }
 

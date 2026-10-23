@@ -69,5 +69,7 @@ export function pushFailureDetail(error) {
           : " could not be reached";
     return `${host}${kind} before returning an HTTP response. Check Cloudflare outbound HTTPS access and the device subscription.`;
   }
+  if (error.oneSignalNoRecipients)
+    return "OneSignal accepted the request but has no subscribed device for HARDBOND. Enable notifications on the iPhone and try a new reminder.";
   return "Request failed without a provider HTTP response; check the host's outbound connection and push configuration.";
 }

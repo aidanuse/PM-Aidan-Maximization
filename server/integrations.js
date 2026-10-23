@@ -4,6 +4,7 @@ import { join } from "node:path";
 import ICAL from "ical.js";
 import webpush from "web-push";
 import { pushFailureDetail } from "./push-errors.js";
+import { createOneSignalSender } from "./onesignal.js";
 
 const FIELD_LABELS = {
   phone: "client phone",
@@ -302,6 +303,12 @@ export function createIntegrationService(context, options = {}) {
   const env = options.env || context.env || process.env;
   const now = options.now || (() => new Date());
   const pushSend = options.pushSend || webpush.sendNotification.bind(webpush);
+  const oneSignal =
+    options.oneSignal ||
+    createOneSignalSender({
+      appId: env.ONESIGNAL_APP_ID,
+      apiKey: env.ONESIGNAL_REST_API_KEY,
+    });
   const fetcher = options.fetch || globalThis.fetch;
   const dataDir = context.dataDir || join(process.cwd(), "data");
   initTables(db);
@@ -338,7 +345,8 @@ export function createIntegrationService(context, options = {}) {
           "TimeTree is connected through files you import. Changes here do not automatically update TimeTree.",
       },
       push: {
-        configured: vapid.ready,
+        configured: vapid.ready || oneSignal.ready,
+        provider: oneSignal.ready ? "onesignal" : "native-web-push",
         publicKeyAvailable: !!vapid.publicKey,
         subscriptionCount: db
           .prepare("SELECT count(*) AS count FROM integration_subscriptions")
@@ -523,10 +531,12 @@ export function createIntegrationService(context, options = {}) {
         );
         continue;
       }
-      if (!vapid.ready) continue;
-      const subscriptions = db
-        .prepare("SELECT endpoint, subscription FROM integration_subscriptions")
-        .all();
+      if (!vapid.ready && !oneSignal.ready) continue;
+      const subscriptions = oneSignal.ready
+        ? [{ endpoint: "onesignal", subscription: null }]
+        : db
+            .prepare("SELECT endpoint, subscription FROM integration_subscriptions")
+            .all();
       if (!subscriptions.length) continue;
       const previous = db
         .prepare("SELECT status FROM integration_deliveries WHERE id=?")
@@ -553,23 +563,28 @@ export function createIntegrationService(context, options = {}) {
       const failures = new Set();
       for (const row of subscriptions) {
         try {
-          await pushSend(
-            JSON.parse(row.subscription),
-            JSON.stringify({
+          const payload = {
               title: reminder.title,
               body: reminder.body || "",
               tag: `reminder-${reminder.id}`,
               url: "/?view=reminders",
-            }),
-            {
+            };
+          if (oneSignal.ready) {
+            await oneSignal.send(payload, Math.max(1, Math.min(86400, Math.floor((expires - current) / 1000))));
+          } else {
+            await pushSend(
+              JSON.parse(row.subscription),
+              JSON.stringify(payload),
+              {
               vapidDetails: vapid.details,
               TTL: Math.max(
                 1,
                 Math.min(86400, Math.floor((expires - current) / 1000)),
               ),
               timeout: 15000,
-            },
-          );
+              },
+            );
+          }
           accepted += 1;
         } catch (error) {
           failures.add(pushFailureDetail(error));
