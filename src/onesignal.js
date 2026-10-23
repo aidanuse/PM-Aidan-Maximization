@@ -7,6 +7,24 @@ function queue(callback) {
   window.OneSignalDeferred.push(callback);
 }
 
+function loadSdk() {
+  const existing = document.querySelector("script[data-hardbond-onesignal]");
+  if (existing?.dataset.loaded === "true") return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const script =
+      existing || document.createElement("script");
+    script.src = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
+    script.defer = true;
+    script.dataset.hardbondOnesignal = "true";
+    script.onload = () => {
+      script.dataset.loaded = "true";
+      resolve();
+    };
+    script.onerror = () => reject(new Error("The OneSignal SDK could not be downloaded."));
+    if (!existing) document.head.appendChild(script);
+  });
+}
+
 export function initOneSignal() {
   if (ready || typeof window === "undefined") return ready;
   ready = new Promise((resolve, reject) => {
@@ -33,6 +51,10 @@ export function initOneSignal() {
         ready = undefined;
         reject(error);
       }
+    });
+    loadSdk().catch((error) => {
+      ready = undefined;
+      reject(error);
     });
   });
   return ready;
