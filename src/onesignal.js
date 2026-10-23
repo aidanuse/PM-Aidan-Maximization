@@ -39,8 +39,8 @@ export function initOneSignal() {
       try {
         await OneSignal.init({
           appId: APP_ID,
-          serviceWorkerPath: "push/onesignal/OneSignalSDKWorker.js",
-          serviceWorkerParam: { scope: "/push/onesignal/" },
+          serviceWorkerPath: "sw.js",
+          serviceWorkerParam: { scope: "/" },
         });
         await OneSignal.login(EXTERNAL_ID);
         clearTimeout(timeout);

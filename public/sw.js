@@ -1,3 +1,5 @@
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+
 /* Operational records and API/auth responses never enter the service-worker cache. */
 const CACHE_NAME = "hardbond-shell-v1";
 const SHELL = [
@@ -130,6 +132,7 @@ self.addEventListener("push", (event) => {
       body: event.data?.text() || "Open HARDBOND to review your reminders.",
     };
   }
+  if (payload.custom?.i || payload.chnl === "OneSignal") return;
   event.waitUntil(
     self.registration.showNotification(
       String(payload.title || "HARDBOND").slice(0, 120),
