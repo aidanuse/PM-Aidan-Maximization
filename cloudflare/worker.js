@@ -88,13 +88,28 @@ export async function sendPush(
   }
   const headers = new Headers(details.headers);
   headers.delete("Content-Length");
-  const response = await fetcher(details.endpoint, {
-    method: details.method,
-    headers,
-    body: details.body,
-    redirect: "error",
-    signal: AbortSignal.timeout(15000),
-  });
+  let response;
+  try {
+    response = await fetcher(details.endpoint, {
+      method: details.method,
+      headers,
+      body: details.body,
+      redirect: "error",
+      signal: AbortSignal.timeout(15000),
+    });
+  } catch (error) {
+    // Preserve only safe diagnostics for the delivery log. Do not store the
+    // endpoint path, payload, credentials, or arbitrary provider error text.
+    let host = "unknown provider";
+    try {
+      host = new URL(details.endpoint).hostname;
+    } catch {
+      /* The generated endpoint was already validated by web-push. */
+    }
+    error.pushStage = "network";
+    error.pushProviderHost = host;
+    throw error;
+  }
   if (!response.ok) {
     // Limit diagnostic data and expose only a recognized provider reason code.
     let body = "";
