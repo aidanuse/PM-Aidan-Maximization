@@ -1,0 +1,84 @@
+.field-plan-summary {
+  padding: 22px;
+  min-width: 0;
+}
+.field-plan-summary p,
+.field-plan-summary li {
+  overflow-wrap: anywhere;
+}
+.field-plan-note {
+  white-space: pre-wrap;
+}
+.field-plan-buttons,
+.field-plan-add,
+.field-plan-save {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.field-plan-add .field {
+  flex: 1;
+  min-width: 180px;
+}
+.field-plan-checks {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+  min-width: 0;
+}
+.field-plan-save {
+  padding: 16px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.field-plan-summary summary {
+  cursor: pointer;
+  font-weight: 650;
+  padding: 8px 0;
+}
+.field-plan-summary details[open] summary {
+  margin-bottom: 14px;
+}
+.field-plan-summary textarea {
+  min-height: 85px;
+}
+.production-list {
+  display: grid;
+  gap: 12px;
+}
+.production-entry {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+.field-phase > summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+.field-phase > summary > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.field-phase > summary small {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 8px;
+  white-space: pre-wrap;
+}
+@media (max-width: 600px) {
+  .field-plan-summary {
+    padding: 16px;
+  }
+  .field-plan-save .btn {
+    width: 100%;
+  }
+}

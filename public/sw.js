@@ -1,4 +1,12 @@
-importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+// Offline records must remain usable when the optional notification provider is unavailable.
+// Keep the first-party worker installable; notification setup still reports provider failures.
+try {
+  importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+} catch (error) {
+  console.warn(
+    "HARDBOND: notification provider worker unavailable; offline shell remains enabled.",
+  );
+}
 
 /* Operational records and API/auth responses never enter the service-worker cache. */
 const CACHE_NAME = "hardbond-shell-v1";

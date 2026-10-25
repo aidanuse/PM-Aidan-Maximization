@@ -22,6 +22,16 @@ A personal, standalone phone-friendly app for Aidan's HARDBOND daily workflow. I
 - Analysis reports recorded delays, rescue delivery costs, and material use with coverage counts. It does not claim profit or saved hours.
 - Photo upload, verified TDS calculators, native App Store distribution and true two-way TimeTree synchronization are not implemented in this version.
 
+## Field workflow improvements
+
+Open **Field plan** to build a short job-specific sequence, assign responsibility, record prerequisites and technical sources, check the phase, and leave a handover. Phases collapse so a phone shows the work sequence without opening every form. The overview highlights holds, overdue actions and missing job details. “Record today’s work” opens a Daily Sheet for the selected job with its plan and previous handover beside the entry.
+
+Inventory's optional **Product reference** stores a coverage source, checked date, coverage conditions and handling notes. The field plan's optional material planner uses those recorded figures with explicit floor/wall areas, coats, allowance and rounding. Applying a calculation updates the draft job requirement and retains its assumptions; save the field plan to persist it. It does not consume stock or reserve it across jobs.
+
+Daily Sheets have optional phase production measurements. Analysis uses reviewed, confirmed matching-work records and keeps elapsed rates separate from worker-hour rates. Missing or overlapping crew intervals do not produce a labor rate. Historical product and job figures are not calculation defaults. See [curated field knowledge](docs/FIELD-KNOWLEDGE.md) for the source extraction and remaining improvements.
+
+Validate the new workflow after building with `npm run test:field`; use `HARDBOND_BROWSER_RUNTIME=cloudflare npm run test:field` to exercise it against the local Cloudflare runtime. The existing browser suite remains `npm run test:browser`.
+
 ## Local development
 
 Requires Node 22.13+ (tested with Node 24). From this directory:

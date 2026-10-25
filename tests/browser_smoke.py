@@ -47,7 +47,7 @@ with tempfile.TemporaryDirectory(prefix='hardbond-browser-') as data:
             page.get_by_role('button',name='New daily sheet',exact=True).click()
             page.screenshot(path=str(ROOT/'test-results'/'daily-form-debug.png'),full_page=True,animations='disabled')
             page.get_by_label('2. Job worked',exact=True).select_option(label='TEST Garage')
-            page.get_by_label('5. Coats completed',exact=True).fill('TEST coat recorded')
+            page.get_by_label('5. Work completed',exact=True).fill('TEST coat recorded')
             page.get_by_role('button',name='Add item',exact=True).click()
             page.get_by_label('Quantity',exact=True).fill('2')
             page.get_by_label('8. What tomorrow needs',exact=True).fill('TEST collect rollers')

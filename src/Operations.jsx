@@ -22,6 +22,7 @@ import {
   X,
 } from "lucide-react";
 import { inventoryStatus, loadCheckStatus } from "../shared/domain.js";
+import { phaseLabel, productionMetrics } from "../shared/field-work.js";
 import "./operations.css";
 
 const uid = () => crypto.randomUUID();
@@ -383,6 +384,81 @@ export function InventoryView({ state, onSave, onDelete, toast }) {
               />
             </Field>
           </div>
+          <details className="field-plan-summary">
+            <summary>Product reference · optional</summary>
+            <p>
+              Record the exact source and the conditions behind its coverage.
+              Historical estimates are not specifications.
+            </p>
+            <div className="form-grid">
+              <Field label="Technical source / document revision">
+                <textarea
+                  maxLength={2000}
+                  value={draft.technical?.source || ""}
+                  onChange={(e) =>
+                    change("technical", {
+                      ...draft.technical,
+                      source: e.target.value,
+                    })
+                  }
+                  placeholder="Manufacturer TDS or application guide, revision / URL"
+                />
+              </Field>
+              <Field label="Source checked on">
+                <input
+                  type="date"
+                  value={draft.technical?.checkedOn || ""}
+                  onChange={(e) =>
+                    change("technical", {
+                      ...draft.technical,
+                      checkedOn: e.target.value,
+                    })
+                  }
+                />
+              </Field>
+              <Field label="Coverage per counting unit (sq ft / coat)">
+                <input
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={draft.technical?.coverageSqftPerUnit ?? ""}
+                  onChange={(e) =>
+                    change("technical", {
+                      ...draft.technical,
+                      coverageSqftPerUnit: numberOrNull(e.target.value),
+                    })
+                  }
+                  placeholder="Leave unknown until confirmed"
+                />
+              </Field>
+              <Field label="Coverage conditions and thickness">
+                <textarea
+                  maxLength={2000}
+                  value={draft.technical?.coverageConditions || ""}
+                  onChange={(e) =>
+                    change("technical", {
+                      ...draft.technical,
+                      coverageConditions: e.target.value,
+                    })
+                  }
+                  placeholder="Wet/dry thickness, kit/component size, substrate, source basis"
+                />
+              </Field>
+              <Field label="Storage, mixing and recoat reference notes">
+                <textarea
+                  maxLength={3000}
+                  value={draft.technical?.handlingNotes || ""}
+                  onChange={(e) =>
+                    change("technical", {
+                      ...draft.technical,
+                      handlingNotes: e.target.value,
+                    })
+                  }
+                  placeholder="Product-specific notes and unresolved questions; current TDS/SDS govern"
+                />
+              </Field>
+            </div>
+          </details>
           <FormActions
             busy={busy}
             onCancel={() => setDraft(null)}
@@ -510,6 +586,29 @@ export function InventoryView({ state, onSave, onDelete, toast }) {
                 </div>
                 {item.notes && (
                   <p className="ops-small muted ops-note">{item.notes}</p>
+                )}
+                {item.technical?.source && (
+                  <details className="ops-note">
+                    <summary>Recorded product reference</summary>
+                    <p className="field-plan-note">
+                      {item.technical.source}
+                      <br />
+                      Checked: {item.technical.checkedOn || "Date not recorded"}
+                    </p>
+                    <p className="field-plan-note">
+                      {item.technical.coverageSqftPerUnit == null
+                        ? "Coverage not recorded"
+                        : `${item.technical.coverageSqftPerUnit} sq ft / ${item.unit || "unit"} / coat`}
+                      <br />
+                      {item.technical.coverageConditions ||
+                        "Coverage conditions not recorded"}
+                    </p>
+                    {item.technical.handlingNotes && (
+                      <p className="field-plan-note">
+                        {item.technical.handlingNotes}
+                      </p>
+                    )}
+                  </details>
                 )}
               </article>
             );
@@ -1316,6 +1415,46 @@ export function AnalysisView({ state, onNavigate }) {
         </EmptyState>
       ) : (
         <>
+          <section className="card ops-panel">
+            <h3>Measured phase productivity</h3>
+            <p>
+              Rates use reviewed sheets whose area and time refer to the same
+              phase. Compare like work and site conditions; these are
+              observations, not promised production targets.
+            </p>
+            <div className="production-list">
+              {sheets
+                .filter((s) => productionMetrics(s))
+                .map((s) => {
+                  const result = productionMetrics(s);
+                  return (
+                    <div className="production-entry" key={s.id}>
+                      <strong>
+                        {jobName(state, s.jobId)} ·{" "}
+                        {phaseLabel(s.production.phase)}
+                      </strong>
+                      <p>
+                        {s.date} · {amount(result.areaSqft)} sq ft completed
+                      </p>
+                      <p>
+                        {result.elapsedRate == null
+                          ? "Elapsed rate: time not recorded"
+                          : `${amount(result.elapsedRate)} sq ft / elapsed hour`}{" "}
+                        ·{" "}
+                        {result.laborRate == null
+                          ? "Labor rate: complete crew clocks needed"
+                          : `${amount(result.laborRate)} sq ft / worker-hour (${amount(result.laborHours)} worker-hours)`}
+                      </p>
+                    </div>
+                  );
+                })}
+            </div>
+            <p className="muted">
+              {sheets.filter((s) => productionMetrics(s)).length} of{" "}
+              {sheets.length} reviewed sheets have a confirmed phase
+              measurement. Add measurements in Daily Sheets.
+            </p>
+          </section>
           <div className="ops-analysis-grid">
             <section className="card ops-panel">
               <div className="ops-section-title">

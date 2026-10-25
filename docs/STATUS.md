@@ -1,5 +1,15 @@
 # Build status
 
+## Field workflow refinement — October 23, 2026
+
+The owner's work-history handoff has been curated into `docs/FIELD-KNOWLEDGE.md`. The app now has job-linked field plans, collapsible phase forms, named responsibilities, prerequisites and hold/handover notes, phase checks and technical source notes. The overview highlights a short set of actionable holds, overdue actions, stock gaps and missing details. Field plans open a job-selected Daily Sheet with the prior handover and plan visible as reference.
+
+Inventory includes optional source-backed product reference fields. The optional job material planner records the source snapshot and calculation assumptions, including separate floor/wall area, coats, allowance and unit rounding. Planning does not consume or reserve inventory. Daily Sheets optionally capture a measured phase, completed area and elapsed time; analysis distinguishes elapsed from worker-hour productivity and excludes incomplete or overlapping crew clocks from labor rates.
+
+Offline service-worker installation now tolerates notification-provider script load failures. The full browser workflow, including offline save/sync/reopen and logout, passed after this correction. The new field workflow browser test passed against both Node and the real local Cloudflare runtime; Cloudflare's two existing runtime scenarios and packaging dry run also passed. No real push/SMS was sent and no production deployment was performed.
+
+These changes are local source changes. Product specifications, historical measurements, crew attendance, stock and external integrations were not populated as current facts. Manufacturer documents still need actual verification before technical field use.
+
 ## Notification delivery troubleshooting
 
 Reported production logs show failed push attempts, confirming the scheduler ran but not establishing why no provider accepted them. New attempts now retain a safe provider HTTP status/recognized reason code or a preparation/timeout classification. Raw provider bodies and credentials are not saved. Reminders displays the recent notification delivery history with a refresh button. Enabling notifications compares the browser subscription's key with the current server key and replaces a mismatched subscription. This fixes a real stale-key path but does not establish that it caused the reported production failures.

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { initOneSignal, requestOneSignalPermission } from "./onesignal.js";
+import FieldPlan from "./FieldPlan.jsx";
+import { PHASES, phaseLabel, nextWorkItems } from "../shared/field-work.js";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -71,6 +73,7 @@ import {
 const NAV = [
   ["today", "Overview", LayoutDashboard],
   ["daily", "Daily sheets", NotebookPen],
+  ["plan", "Field plan", ClipboardList],
   ["jobs", "Jobs", BriefcaseBusiness],
   ["inventory", "Inventory", Package],
   ["load", "Load checks", Truck],
@@ -155,6 +158,8 @@ export default function App() {
     [route, setRoute] = useState(
       () => new URLSearchParams(location.search).get("view") || "today",
     ),
+    [dailyJobId, setDailyJobId] = useState(""),
+    [planJobId, setPlanJobId] = useState(""),
     [menu, setMenu] = useState(false),
     [loading, setLoading] = useState(true),
     [fatal, setFatal] = useState(""),
@@ -211,7 +216,9 @@ export default function App() {
         setOneSignalPrompt(true);
     };
     window.addEventListener("hardbond:onesignal-ready", ready);
-    initOneSignal().then(ready).catch(() => {});
+    initOneSignal()
+      .then(ready)
+      .catch(() => {});
     return () => window.removeEventListener("hardbond:onesignal-ready", ready);
   }, [auth?.authenticated]);
   useEffect(() => {
@@ -249,7 +256,15 @@ export default function App() {
     window.addEventListener("online", online);
     return () => window.removeEventListener("online", online);
   }, [auth?.authenticated, sync]);
-  const navigate = (id) => {
+  const navigate = (id, context = {}) => {
+    if (
+      !window.dispatchEvent(
+        new Event("hardbond:before-navigate", { cancelable: true }),
+      )
+    )
+      return;
+    setDailyJobId(id === "daily" ? context.jobId || "" : "");
+    setPlanJobId(id === "plan" ? context.jobId || "" : "");
     setRoute(id);
     setMenu(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -350,11 +365,14 @@ export default function App() {
     );
   let view;
   switch (route) {
+    case "plan":
+      view = <FieldPlan {...props} initialJobId={planJobId} />;
+      break;
     case "jobs":
       view = <JobsView {...props} />;
       break;
     case "daily":
-      view = <DailyView {...props} />;
+      view = <DailyView {...props} initialJobId={dailyJobId} />;
       break;
     case "inventory":
       view = <InventoryView {...props} />;
@@ -673,6 +691,7 @@ function Login({ auth, onLogin }) {
   );
 }
 function TodayView({ state, onNavigate }) {
+  const nextMoves = nextWorkItems(state, today());
   const date = today(),
     jobs = state.jobs.filter(
       (j) => j.date === date && j.bookingStatus !== "cancelled",
@@ -708,6 +727,40 @@ function TodayView({ state, onNavigate }) {
           </Button>
         }
       />
+      <Card className="field-plan-summary">
+        <div className="row-between">
+          <div>
+            <h2>Your next move</h2>
+            <p>
+              {jobs.length
+                ? `${jobs.length} job${jobs.length === 1 ? "" : "s"} scheduled today. Confirm the target, divide the work, and review the last handover.`
+                : nextJobs.length
+                  ? `Prepare for ${nextJobs[0].title}. Confirm the work sequence and missing requirements before mobilizing.`
+                  : "Add a job, then build a short field plan the crew can follow."}
+            </p>
+          </div>
+          <Button kind="primary" onClick={() => onNavigate("plan")}>
+            Open field plan
+            <ArrowRight size={16} />
+          </Button>
+        </div>
+        {nextMoves.length > 0 && (
+          <div className="production-list">
+            {nextMoves.map((item) => (
+              <div className="production-entry" key={item.id}>
+                <h3>{item.title}</h3>
+                <p className="field-plan-note">{item.detail}</p>
+                <Button
+                  onClick={() => onNavigate(item.route, { jobId: item.jobId })}
+                >
+                  Take next step
+                  <ArrowRight size={16} />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
       <div className="hero-card">
         <div>
           <Badge tone="light">THE DAILY LOOP</Badge>
@@ -1288,8 +1341,10 @@ function MaterialEditor({ label, value, inventory, onChange }) {
     </div>
   );
 }
-function DailyView({ state, onSave, onDelete }) {
-  const [editing, setEditing] = useState(null);
+function DailyView({ state, onSave, onDelete, initialJobId = "" }) {
+  const [editing, setEditing] = useState(
+    initialJobId ? { jobId: initialJobId } : null,
+  );
   const sheets = [...state.dailySheets].sort((a, b) =>
     b.date.localeCompare(a.date),
   );
@@ -1404,11 +1459,31 @@ function DailyForm({ record, state, onClose, onSave }) {
       tomorrowNeeds: "",
       status: "draft",
       remindAt: "",
+      production: {
+        phase: "",
+        areaSqft: null,
+        elapsedMinutes: null,
+        sameWork: false,
+      },
       ...record,
     }),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  const selectedJob = state.jobs.find((j) => j.id === form.jobId);
+  const activePhase = selectedJob?.fieldPlan?.find(
+    (p) => p.status !== "complete",
+  );
+  const previousSheet = state.dailySheets
+    .filter(
+      (s) =>
+        s.jobId === form.jobId && s.id !== record.id && s.date <= form.date,
+    )
+    .sort(
+      (a, b) =>
+        b.date.localeCompare(a.date) ||
+        (b.updatedAt || "").localeCompare(a.updatedAt || ""),
+    )[0];
   const crewChange = (i, k, v) =>
     set(
       "crew",
@@ -1483,6 +1558,59 @@ function DailyForm({ record, state, onClose, onSave }) {
             </select>
           </Field>
         </div>
+        {selectedJob && (activePhase || previousSheet?.tomorrowNeeds) && (
+          <Card className="field-plan-summary">
+            <h3>Job brief · reference for your entry</h3>
+            {selectedJob.fieldPlan?.some(
+              (p) =>
+                p.status === "complete" &&
+                p.checks.some((c) => c.status === "unconfirmed"),
+            ) && (
+              <p>
+                Earlier work is marked complete with unconfirmed phase checks.
+                Review the field plan before releasing subsequent work.
+              </p>
+            )}
+            {activePhase && (
+              <>
+                <p>
+                  <strong>{phaseLabel(activePhase.phase)}</strong> ·{" "}
+                  {activePhase.status} ·{" "}
+                  {activePhase.owner || "Owner not assigned"}
+                </p>
+                <p className="field-plan-note">
+                  {activePhase.target || "Target not recorded"}
+                </p>
+                {activePhase.prerequisite && (
+                  <p className="field-plan-note">
+                    <strong>Before proceeding:</strong>{" "}
+                    {activePhase.prerequisite}
+                  </p>
+                )}
+                {activePhase.status === "held" && (
+                  <p className="field-plan-note">
+                    <strong>On hold:</strong>{" "}
+                    {activePhase.handover ||
+                      "Confirm the hold reason before proceeding."}
+                  </p>
+                )}
+              </>
+            )}
+            {previousSheet?.tomorrowNeeds && (
+              <p className="field-plan-note">
+                <strong>
+                  Previous {previousSheet.status} handover ({previousSheet.date}
+                  ):
+                </strong>{" "}
+                {previousSheet.tomorrowNeeds}
+              </p>
+            )}
+            <small>
+              Planned work is a reference. Record only what actually happened
+              below.
+            </small>
+          </Card>
+        )}
         <div className="row-between">
           <h3>3. Crew + clock times</h3>
           <Button
@@ -1577,9 +1705,18 @@ function DailyForm({ record, state, onClose, onSave }) {
           </div>
         ))}
         <datalist id="crew-names">
-          <option value="Aidan" />
-          <option value="Max" />
-          <option value="Daniel" />
+          {[
+            ...new Set([
+              state.settings.ownerName || "Aidan",
+              ...state.dailySheets.flatMap((s) =>
+                (s.crew || []).map((c) => c.person),
+              ),
+            ]),
+          ]
+            .filter(Boolean)
+            .map((name) => (
+              <option key={name} value={name} />
+            ))}
         </datalist>
         <Field label="4. Conditions">
           <textarea
@@ -1589,14 +1726,90 @@ function DailyForm({ record, state, onClose, onSave }) {
             placeholder="Actual air/slab readings with units, time, test method and product requirements. Leave unmeasured values unknown."
           />
         </Field>
-        <Field label="5. Coats completed">
+        <Field label="5. Work completed">
           <textarea
             rows={3}
             value={form.coatsCompleted}
             onChange={(e) => set("coatsCompleted", e.target.value)}
-            placeholder="Zone, coat, exact product, area, finish time and remaining work"
+            placeholder="Phase, zone, area completed, exact product if used, finish time and remaining work"
           />
         </Field>
+        <details className="card field-plan-summary">
+          <summary>Production measurement · optional</summary>
+          <p>
+            Measure one phase and area per sheet. Use separate sheets for
+            separate phases. Crew intervals must cover this same work for a
+            labor productivity rate.
+          </p>
+          <div className="form-grid">
+            <Field label="Measured phase">
+              <select
+                value={form.production.phase}
+                onChange={(e) =>
+                  set("production", {
+                    ...form.production,
+                    phase: e.target.value,
+                  })
+                }
+              >
+                <option value="">Not recorded</option>
+                {Object.entries(PHASES).map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v.label}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Area actually completed (sq ft)">
+              <input
+                type="number"
+                min="0"
+                step="any"
+                value={form.production.areaSqft ?? ""}
+                onChange={(e) =>
+                  set("production", {
+                    ...form.production,
+                    areaSqft:
+                      e.target.value === "" ? null : Number(e.target.value),
+                  })
+                }
+                placeholder="Measured area, not the entire job"
+              />
+            </Field>
+            <Field label="Phase elapsed time (minutes)">
+              <input
+                type="number"
+                min="0"
+                step="any"
+                value={form.production.elapsedMinutes ?? ""}
+                onChange={(e) =>
+                  set("production", {
+                    ...form.production,
+                    elapsedMinutes:
+                      e.target.value === "" ? null : Number(e.target.value),
+                  })
+                }
+                placeholder="Wall-clock duration for this phase"
+              />
+            </Field>
+          </div>
+          <Field label="Area, elapsed time and all crew intervals refer to this same phase">
+            <input
+              type="checkbox"
+              checked={form.production.sameWork}
+              onChange={(e) =>
+                set("production", {
+                  ...form.production,
+                  sameWork: e.target.checked,
+                })
+              }
+            />
+          </Field>
+          <p className="muted small">
+            Analysis excludes unconfirmed measurements and drafts. Missing or
+            incomplete crew clocks never become a complete labor total.
+          </p>
+        </details>
         <MaterialEditor
           label="6. Materials used"
           value={form.materials}
@@ -1635,6 +1848,9 @@ function DailyForm({ record, state, onClose, onSave }) {
               <option value="job-details">Missing job details</option>
               <option value="access">Access</option>
               <option value="equipment">Equipment</option>
+              <option value="crew">Crew / attendance</option>
+              <option value="cure">Cure / next-phase hold</option>
+              <option value="setup">Setup / movement</option>
               <option value="weather">Conditions</option>
               <option value="rework">Rework</option>
               <option value="other">Other</option>

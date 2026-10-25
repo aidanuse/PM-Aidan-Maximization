@@ -87,6 +87,69 @@ export const recordSchemas = {
       sourceEventId: text(500),
       sourceVerifiedAt: timestamp,
       notes: text(),
+      fieldPlan: z
+        .array(
+          z
+            .object({
+              id,
+              phase: z.enum([
+                "setup",
+                "preparation",
+                "repairs",
+                "primer",
+                "coating",
+                "finish",
+                "handover",
+              ]),
+              owner: text(300),
+              target: text(2000),
+              equipment: text(2000),
+              prerequisite: text(2000),
+              source: text(2000),
+              status: z
+                .enum(["planned", "working", "held", "complete"])
+                .default("planned"),
+              checks: z
+                .array(
+                  z
+                    .object({
+                      label: text(1000),
+                      status: z
+                        .enum(["unconfirmed", "checked", "not-applicable"])
+                        .default("unconfirmed"),
+                    })
+                    .strict(),
+                )
+                .max(30)
+                .default([]),
+              handover: text(3000),
+            })
+            .strict(),
+        )
+        .max(50)
+        .default([]),
+      materialEstimates: z
+        .array(
+          z
+            .object({
+              inventoryId: id,
+              floorArea: positiveNullable,
+              wallArea: positiveNullable,
+              coats: z.number().int().positive(),
+              allowancePercent: z.number().finite().nonnegative(),
+              coverage: z.number().finite().positive(),
+              units: z.number().finite().nonnegative(),
+              unit: text(80),
+              wholeUnits: z.boolean(),
+              exactProduct: text(500),
+              source: text(2000),
+              checkedOn: date,
+              coverageConditions: text(2000),
+            })
+            .strict(),
+        )
+        .max(500)
+        .default([]),
     })
     .strict(),
   inventory: z
@@ -98,6 +161,16 @@ export const recordSchemas = {
       location: text(300),
       minimum: positiveNullable,
       exactProduct: text(500),
+      technical: z
+        .object({
+          source: text(2000),
+          checkedOn: date,
+          coverageSqftPerUnit: positiveNullable,
+          coverageConditions: text(2000),
+          handlingNotes: text(3000),
+        })
+        .strict()
+        .default({}),
       notes: text(),
       stockGeneration: z.number().int().nonnegative().optional(),
     })
@@ -124,6 +197,26 @@ export const recordSchemas = {
         .default([]),
       conditions: text(),
       coatsCompleted: text(),
+      production: z
+        .object({
+          phase: z
+            .enum([
+              "",
+              "setup",
+              "preparation",
+              "repairs",
+              "primer",
+              "coating",
+              "finish",
+              "handover",
+            ])
+            .default(""),
+          areaSqft: positiveNullable,
+          elapsedMinutes: positiveNullable,
+          sameWork: z.boolean().default(false),
+        })
+        .strict()
+        .default({}),
       materials,
       issues: text(),
       delayMinutes: positiveNullable,
