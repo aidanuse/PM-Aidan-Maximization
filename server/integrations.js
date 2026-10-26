@@ -5,6 +5,7 @@ import ICAL from "ical.js";
 import webpush from "web-push";
 import { pushFailureDetail } from "./push-errors.js";
 import { createOneSignalSender } from "./onesignal.js";
+import { createCalendarFeedSync } from "./calendar-sync.js";
 
 const FIELD_LABELS = {
   phone: "client phone",
@@ -312,6 +313,16 @@ export function createIntegrationService(context, options = {}) {
   const fetcher = options.fetch || globalThis.fetch;
   const dataDir = context.dataDir || join(process.cwd(), "data");
   initTables(db);
+  db.exec(
+    "CREATE TABLE IF NOT EXISTS integration_calendar_job_baselines (source_key TEXT PRIMARY KEY, snapshot TEXT NOT NULL)",
+  );
+  const calendarSync = createCalendarFeedSync({
+    db,
+    env,
+    fetcher,
+    now,
+    importer: (input) => importCalendar(context, input),
+  });
   const vapid = options.vapid || initializeVapid(dataDir, env, db);
   let running = false;
 
@@ -342,7 +353,7 @@ export function createIntegrationService(context, options = {}) {
         icsImportAvailable: true,
         icsExportAvailable: true,
         detail:
-          "TimeTree is connected through files you import. Changes here do not automatically update TimeTree.",
+          "Calendar files can be imported manually. Optional private feed polling is one-way and requires a supported HTTPS iCalendar subscription; it is not a direct TimeTree API connection.",
       },
       push: {
         configured: vapid.ready || oneSignal.ready,
@@ -535,7 +546,9 @@ export function createIntegrationService(context, options = {}) {
       const subscriptions = oneSignal.ready
         ? [{ endpoint: "onesignal", subscription: null }]
         : db
-            .prepare("SELECT endpoint, subscription FROM integration_subscriptions")
+            .prepare(
+              "SELECT endpoint, subscription FROM integration_subscriptions",
+            )
             .all();
       if (!subscriptions.length) continue;
       const previous = db
@@ -564,24 +577,30 @@ export function createIntegrationService(context, options = {}) {
       for (const row of subscriptions) {
         try {
           const payload = {
-              title: reminder.title,
-              body: reminder.body || "",
-              tag: `reminder-${reminder.id}`,
-              url: "/?view=reminders",
-            };
+            title: reminder.title,
+            body: reminder.body || "",
+            tag: `reminder-${reminder.id}`,
+            url: "/?view=reminders",
+          };
           if (oneSignal.ready) {
-            await oneSignal.send(payload, Math.max(1, Math.min(86400, Math.floor((expires - current) / 1000))));
+            await oneSignal.send(
+              payload,
+              Math.max(
+                1,
+                Math.min(86400, Math.floor((expires - current) / 1000)),
+              ),
+            );
           } else {
             await pushSend(
               JSON.parse(row.subscription),
               JSON.stringify(payload),
               {
-              vapidDetails: vapid.details,
-              TTL: Math.max(
-                1,
-                Math.min(86400, Math.floor((expires - current) / 1000)),
-              ),
-              timeout: 15000,
+                vapidDetails: vapid.details,
+                TTL: Math.max(
+                  1,
+                  Math.min(86400, Math.floor((expires - current) / 1000)),
+                ),
+                timeout: 15000,
               },
             );
           }
@@ -669,6 +688,7 @@ export function createIntegrationService(context, options = {}) {
     if (running) return;
     running = true;
     try {
+      await calendarSync.run();
       await prepareDailyPrompt();
       await processReminders();
       await processSms();
@@ -685,6 +705,7 @@ export function createIntegrationService(context, options = {}) {
 
   return {
     status,
+    calendarSync,
     preview,
     runOnce,
     vapid,
@@ -838,6 +859,29 @@ export async function importCalendar(context, input) {
       String(item.getFirstPropertyValue("status") || "").toUpperCase() ===
       "CANCELLED"
     ) {
+      if (input.mergeSourceFields) {
+        const uid = String(item.getFirstPropertyValue("uid") || "");
+        const recurrence = item.getFirstPropertyValue("recurrence-id");
+        const identity = `${uid}${recurrence ? `#${recurrence.toString()}` : ""}`;
+        const key = `${input.source}:${identity}`;
+        const mapping = db
+          .prepare(
+            "SELECT record_id FROM integration_calendar_sources WHERE source_key=?",
+          )
+          .get(`job:${key}`);
+        const job = uid
+          ? jobs.get(mapping?.record_id || `job-${hash(key).slice(0, 40)}`)
+          : null;
+        // Keep the job for review, but don't treat a cancelled source as verified for SMS.
+        if (job?.sourceVerifiedAt) {
+          const updated = await saveRecord(
+            "jobs",
+            { ...job, sourceVerifiedAt: "" },
+            { system: true },
+          );
+          jobs.set(job.id, updated.record || updated);
+        }
+      }
       report.warnings.push(
         `${title}: cancellation was not applied automatically. Review the linked job and calendar event.`,
       );
@@ -895,6 +939,15 @@ export async function importCalendar(context, input) {
       .prepare("SELECT * FROM integration_calendar_sources WHERE source_key=?")
       .get(sourceKey);
     const existing = records.get(mapping?.record_id || recordId);
+    if (input.mergeSourceFields && existing && !mapping) {
+      report.conflicts.push({
+        id: existing.id,
+        title,
+        reason:
+          "This event has no retained import mapping (for example after a restore). Automatic sync kept it unchanged; review and relink it before importing.",
+      });
+      continue;
+    }
     if (mapping && existing && existing.version !== mapping.synced_version) {
       report.conflicts.push({
         id: existing.id,
@@ -927,42 +980,122 @@ export async function importCalendar(context, input) {
         )
         .get(jobKey);
       const existingJob = jobs.get(jobMapping?.record_id || jobId);
+      const incoming = extractJob(event, details);
+      const sourceFields = [
+        "title",
+        "clientName",
+        "phone",
+        "address",
+        "date",
+        "areaSqft",
+        "system",
+        "product",
+        "arrivalTime",
+        "access",
+        "scope",
+        "notes",
+      ];
+      const baselineRow = db
+        .prepare(
+          "SELECT snapshot FROM integration_calendar_job_baselines WHERE source_key=?",
+        )
+        .get(jobKey);
+      const baseline = baselineRow ? JSON.parse(baselineRow.snapshot) : null;
+      const merged = { ...incoming };
+      const conflicting = [];
+      if (input.mergeSourceFields && existingJob && baseline) {
+        for (const field of sourceFields) {
+          if (existingJob[field] !== baseline[field]) {
+            if (
+              incoming[field] !== baseline[field] &&
+              incoming[field] !== existingJob[field]
+            )
+              conflicting.push(field);
+            else merged[field] = existingJob[field];
+          }
+        }
+      }
       if (
-        jobMapping &&
-        existingJob &&
-        existingJob.version !== jobMapping.synced_version
+        conflicting.length ||
+        (input.mergeSourceFields && existingJob && !jobMapping) ||
+        (jobMapping &&
+          existingJob &&
+          existingJob.version !== jobMapping.synced_version &&
+          !(input.mergeSourceFields && baseline))
       ) {
         report.conflicts.push({
           id: existingJob.id,
           title,
-          reason: "The job card changed locally. Import did not overwrite it.",
+          reason: conflicting.length
+            ? `Both the source and HARDBOND changed: ${conflicting.join(", ")}. Review this job; local edits were kept.`
+            : "The job card changed locally. Import did not overwrite it.",
         });
         continue;
       }
+      const saveBaseline = () =>
+        db
+          .prepare(
+            "INSERT INTO integration_calendar_job_baselines(source_key,snapshot) VALUES(?,?) ON CONFLICT(source_key) DO UPDATE SET snapshot=excluded.snapshot",
+          )
+          .run(
+            jobKey,
+            JSON.stringify(
+              Object.fromEntries(
+                sourceFields.map((field) => [field, incoming[field]]),
+              ),
+            ),
+          );
+      const verifiedAt =
+        input.mergeSourceFields &&
+        existingJob &&
+        sourceFields.some((field) => merged[field] !== incoming[field])
+          ? existingJob.sourceVerifiedAt
+          : new Date().toISOString();
       if (existingJob && jobMapping?.fingerprint === fingerprint) {
+        // Avoid making every five-minute read invalidate an open job editor.
+        // The existing freshness guard is 24 hours; refresh unchanged jobs within 12.
+        const verifiedAge =
+          Date.now() - Date.parse(existingJob.sourceVerifiedAt || "");
+        if (
+          input.mergeSourceFields &&
+          verifiedAge >= 0 &&
+          verifiedAge < 12 * 60 * 60_000
+        ) {
+          saveBaseline();
+          continue;
+        }
         const refreshed = await saveRecord(
           "jobs",
-          { ...existingJob, sourceVerifiedAt: new Date().toISOString() },
+          { ...existingJob, sourceVerifiedAt: verifiedAt },
           { system: true },
         );
         jobs.set(refreshed.id, refreshed);
         db.prepare(
           "UPDATE integration_calendar_sources SET synced_version=? WHERE source_key=?",
         ).run(refreshed.version, jobKey);
+        saveBaseline();
         continue;
       }
       let job = await saveRecord(
         "jobs",
         {
           ...(existingJob || {}),
-          ...extractJob(event, details),
-          sourceVerifiedAt: new Date().toISOString(),
+          ...merged,
+          ...(input.mergeSourceFields && existingJob
+            ? {
+                crew: existingJob.crew,
+                materials: existingJob.materials,
+                bookingStatus: existingJob.bookingStatus,
+              }
+            : {}),
+          sourceVerifiedAt: verifiedAt,
           id: existingJob?.id || jobId,
         },
         { system: true },
       );
       if (job?.record) job = job.record;
       jobs.set(job.id, job);
+      saveBaseline();
       db.prepare(
         "INSERT INTO integration_calendar_sources(source_key,record_id,fingerprint,synced_version) VALUES(?,?,?,?) ON CONFLICT(source_key) DO UPDATE SET record_id=excluded.record_id,fingerprint=excluded.fingerprint,synced_version=excluded.synced_version",
       ).run(jobKey, job.id, fingerprint, job.version);
@@ -1031,6 +1164,19 @@ export function registerIntegrations(app, context, options = {}) {
   };
   app.get("/api/integrations/status", auth, (_req, res) =>
     res.json(service.status()),
+  );
+  app.get("/api/integrations/calendar/sync", auth, (_req, res) =>
+    res.json(service.calendarSync.status()),
+  );
+  app.put(
+    "/api/integrations/calendar/sync",
+    auth,
+    route((req, res) => res.json(service.calendarSync.pause(req.body?.paused))),
+  );
+  app.post(
+    "/api/integrations/calendar/sync",
+    auth,
+    route(async (_req, res) => res.json(await service.calendarSync.run(true))),
   );
   app.get("/api/integrations/followups/preview", auth, (_req, res) =>
     res.json(service.preview()),

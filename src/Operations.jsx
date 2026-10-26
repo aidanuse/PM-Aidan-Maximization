@@ -24,6 +24,7 @@ import {
 import { inventoryStatus, loadCheckStatus } from "../shared/domain.js";
 import { phaseLabel, productionMetrics } from "../shared/field-work.js";
 import "./operations.css";
+import CalendarSync from "./CalendarSync.jsx";
 
 const uid = () => crypto.randomUUID();
 const numberOrNull = (value) =>
@@ -1697,7 +1698,7 @@ export function CalendarView({
       <Heading
         eyebrow="YOUR TEAM SCHEDULE"
         title="See what’s coming."
-        description="Keep a local working calendar and bring in exported TimeTree events."
+        description="Keep a working calendar, import exports, or check a supported private feed automatically."
       >
         <button
           className="btn"
@@ -1712,14 +1713,15 @@ export function CalendarView({
           <Plus size={17} /> Add event
         </button>
       </Heading>
+      <CalendarSync reload={reload} />
       <div className="ops-callout">
         <CalendarDays size={22} />
         <div>
           <strong>TimeTree remains your team schedule.</strong>
           <p>
-            This app supports calendar-file import and export. It does not have
-            a live TimeTree connection, and editing here does not update
-            TimeTree. Import a fresh export when the team schedule changes.
+            File import is available now. Automatic checks require a configured,
+            supported calendar feed. Editing here does not update TimeTree. A
+            successful feed read is not proof of a direct TimeTree integration.
           </p>
         </div>
       </div>

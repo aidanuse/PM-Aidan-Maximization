@@ -1,5 +1,7 @@
 # Local Cloudflare development only. Copy to ignored .dev.vars and replace privately.
 OWNER_PASSWORD=""
+# Optional supported private HTTPS iCalendar subscription; never a calendar invitation URL.
+# TIMETREE_FEED_URL=""
 # Optional: PUBLIC_URL="https://hardbond-command.YOUR-SUBDOMAIN.workers.dev"
 # Twilio remains optional and may charge separately. Enable only after recipient review.
 # TWILIO_ACCOUNT_SID=""

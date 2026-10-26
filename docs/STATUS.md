@@ -1,5 +1,9 @@
 # Build status
 
+## Automatic calendar-feed sync
+
+Implemented a private runtime feed configuration, five-minute scheduler checks, manual sync and pause controls, durable sync status/lease, bounded HTTPS downloads and authenticated API/UI. Feed updates retain operational job fields and use source snapshots for conflicting source edits. Cancellations, unsupported recurrence and restored records without mappings are flagged for review. No genuine TimeTree feed or API has been connected or verified; automatic use requires a supported subscription. See `CALENDAR-SYNC.md`.
+
 ## Field workflow refinement — October 23, 2026
 
 The owner's work-history handoff has been curated into `docs/FIELD-KNOWLEDGE.md`. The app now has job-linked field plans, collapsible phase forms, named responsibilities, prerequisites and hold/handover notes, phase checks and technical source notes. The overview highlights a short set of actionable holds, overdue actions, stock gaps and missing details. Field plans open a job-selected Daily Sheet with the prior handover and plan visible as reference.

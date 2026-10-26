@@ -40,6 +40,10 @@ with tempfile.TemporaryDirectory(prefix="hardbond-plan-") as data:
                 page.get_by_role("button",name="Save item",exact=True).click()
                 expect(page.get_by_role("button",name="Save item",exact=True)).to_have_count(0)
                 assert page.request.get(base + "/api/state").json()["inventory"][0]["technical"]["handlingNotes"] == "TEST storage note; confirm current SDS"
+                page.goto(base + "/?view=calendar")
+                expect(page.get_by_role("heading",name="Automatic calendar feed",exact=True)).to_be_visible()
+                expect(page.get_by_text("Feed not configured",exact=True)).to_be_visible()
+                expect(page.get_by_role("button",name="Sync now",exact=True)).to_be_disabled()
                 page.goto(base + "/?view=plan")
                 page.get_by_text("Plan material quantities · optional", exact=True).click()
                 page.get_by_label("Product for material plan", exact=True).select_option("plan-product")

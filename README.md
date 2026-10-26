@@ -34,6 +34,8 @@ Validate the new workflow after building with `npm run test:field`; use `HARDBON
 
 ## Local development
 
+Automatic incoming calendar feeds are available under **Calendar → Automatic calendar feed**. They require a private supported HTTPS iCalendar subscription configured as the runtime secret `TIMETREE_FEED_URL`; automatic checks start paused. This is five-minute one-way polling, not a direct or instant TimeTree integration. See [calendar sync setup and limits](docs/CALENDAR-SYNC.md).
+
 Requires Node 22.13+ (tested with Node 24). From this directory:
 
 ```sh

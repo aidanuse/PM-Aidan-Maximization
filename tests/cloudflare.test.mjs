@@ -81,6 +81,7 @@ test(
       assert.match(result.headers.get("set-cookie"), /Secure/);
     };
     assert.equal((await call("/api/health")).body.runtime, "cloudflare");
+    assert.equal((await call("/api/integrations/calendar/sync")).status, 401);
     assert.equal((await call("/api/state")).status, 401);
     assert.equal(
       (await call("/api/auth/login", "POST", { password })).status,
@@ -98,6 +99,20 @@ test(
       403,
     );
     await login();
+    const feedStatus = await call("/api/integrations/calendar/sync");
+    assert.equal(feedStatus.status, 200);
+    assert.equal(feedStatus.body.configured, false);
+    assert.equal(feedStatus.body.paused, true);
+    assert.equal(
+      (await call("/api/integrations/calendar/sync", "PUT", { paused: false }))
+        .body.paused,
+      false,
+    );
+    assert.equal(
+      (await call("/api/integrations/calendar/sync", "POST", {})).body
+        .configured,
+      false,
+    );
     assert.equal(
       (await call("/api/state")).headers.get("cache-control"),
       "no-store",
