@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { request } from "./api.js";
 import { Button, Card } from "./ui.jsx";
+import { RefreshCw } from "lucide-react";
 
 export default function CalendarSync({ reload }) {
   const [status, setStatus] = useState(null),
     [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [message, setMessage] = useState("");
   useEffect(() => {
     let live = true;
     request("/api/integrations/calendar/sync")
@@ -22,11 +24,20 @@ export default function CalendarSync({ reload }) {
   async function change(method, body) {
     setBusy(true);
     setError("");
+    setMessage("");
     try {
-      setStatus(
-        await request("/api/integrations/calendar/sync", { method, body }),
-      );
-      if (method === "POST") await reload();
+      const next = await request("/api/integrations/calendar/sync", {
+        method,
+        body,
+      });
+      setStatus(next);
+      if (method === "POST") {
+        await reload();
+        if (!next.lastError)
+          setMessage(
+            "Connected calendar feed refreshed. Review any conflicts or warnings below.",
+          );
+      }
     } catch (e) {
       setError(e.message);
     } finally {
@@ -38,6 +49,10 @@ export default function CalendarSync({ reload }) {
   return (
     <Card className="field-plan-summary">
       <h2>Automatic calendar feed</h2>
+      <p>
+        Use Refresh TimeTree to check the connected source immediately. This
+        does not sign in to or scrape your private TimeTree webpage.
+      </p>
       <p>
         A supported private HTTPS iCalendar subscription can bring new and
         changed events into HARDBOND every five minutes. This is one-way
@@ -64,8 +79,8 @@ export default function CalendarSync({ reload }) {
                 is not a feed. In the existing Cloudflare Worker, add a runtime
                 secret named <code>TIMETREE_FEED_URL</code> containing that
                 subscription URL, then deploy/apply the secret change. Keep the
-                URL private. Return here, run Sync now, review the result, then
-                enable automatic checks.
+                URL private. Return here, run Refresh TimeTree, review the
+                result, then enable automatic checks.
               </p>
               <p>
                 If TimeTree does not provide a feed or supported integration,
@@ -77,10 +92,12 @@ export default function CalendarSync({ reload }) {
           )}
           <div className="field-plan-buttons">
             <Button
-              disabled={busy || !status.configured}
+              disabled={busy}
+              kind="primary"
               onClick={() => change("POST", {})}
             >
-              {busy ? "Working…" : "Sync now"}
+              <RefreshCw size={16} />
+              {busy ? "Refreshing…" : "Refresh TimeTree"}
             </Button>
             <Button
               disabled={busy || !status.configured}
@@ -143,6 +160,7 @@ export default function CalendarSync({ reload }) {
         </>
       )}
       {error && <p role="alert">{error}</p>}
+      {message && <p role="status">{message}</p>}
     </Card>
   );
 }

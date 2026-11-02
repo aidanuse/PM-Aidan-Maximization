@@ -160,11 +160,23 @@ test("concurrent services share a fetch lease and release it on completion", asy
   const one = createIntegrationService({ ...store }, options),
     two = createIntegrationService({ ...store }, options);
   const pending = one.calendarSync.run(true);
-  await two.calendarSync.run(true);
+  await assert.rejects(
+    two.calendarSync.run(true),
+    (error) => error.status === 409 && /already running/.test(error.message),
+  );
   assert.equal(calls, 1);
   resolve(new Response(calendar()));
   await pending;
   assert.equal(store.getRecords("jobs").length, 1);
+});
+test("manual refresh reports a missing connection instead of returning success", async (t) => {
+  const f = fixture(t, { env: {} });
+  await assert.rejects(
+    f.service.calendarSync.run(true),
+    (error) => error.status === 409 && /not connected/.test(error.message),
+  );
+  await f.service.runOnce();
+  assert.equal(f.calls(), 0);
 });
 test("explicit cancellations and recurring events are flagged, never silently delete jobs", async (t) => {
   const f = fixture(t);

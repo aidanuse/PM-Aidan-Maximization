@@ -109,9 +109,8 @@ test(
       false,
     );
     assert.equal(
-      (await call("/api/integrations/calendar/sync", "POST", {})).body
-        .configured,
-      false,
+      (await call("/api/integrations/calendar/sync", "POST", {})).status,
+      409,
     );
     assert.equal(
       (await call("/api/state")).headers.get("cache-control"),

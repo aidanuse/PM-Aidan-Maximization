@@ -56,14 +56,32 @@ export function createCalendarFeedSync({ db, env, fetcher, importer, now }) {
   }
   async function run(force = false) {
     const url = feedUrl(env.TIMETREE_FEED_URL);
-    if (!url) return status();
+    if (!url) {
+      if (force)
+        throw Object.assign(
+          new Error(
+            "TimeTree is not connected. A calendar webpage link does not grant access to its events. Configure a supported private calendar feed; authenticated webpage scraping is not connected.",
+          ),
+          { status: 409 },
+        );
+      return status();
+    }
     const stamp = now().getTime();
     const claimed = db
       .prepare(
         "UPDATE integration_calendar_feed SET lock_until=? WHERE id=1 AND lock_until<=? AND (?=1 OR (paused=0 AND next_check<=?))",
       )
       .run(stamp + 120_000, stamp, force ? 1 : 0, stamp);
-    if (!claimed.changes) return status();
+    if (!claimed.changes) {
+      if (force)
+        throw Object.assign(
+          new Error(
+            "A calendar refresh is already running. Wait a moment, then try again.",
+          ),
+          { status: 409 },
+        );
+      return status();
+    }
     const previous = JSON.parse(row().state);
     let state = { ...previous, lastAttempt: new Date(stamp).toISOString() };
     let errorMessage =

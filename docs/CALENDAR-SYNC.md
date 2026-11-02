@@ -6,7 +6,7 @@ HARDBOND can poll **one supported private HTTPS iCalendar subscription** every f
 
 1. Establish that the source calendar provides an automatically updated HTTPS `.ics` subscription. The response must be a VCALENDAR, not a sign-in page. HARDBOND does not sign in to TimeTree or scrape its website.
 2. In the **existing Cloudflare Worker**, add the runtime secret `TIMETREE_FEED_URL` with that private subscription URL. Apply/deploy the secret change. Do not paste private feed tokens into chat, source control, or ordinary public variables. Node development can supply the same variable privately in its process environment.
-3. Open HARDBOND **Calendar → Automatic calendar feed**. It starts paused. Click **Sync now** and review the timestamps, counts, conflicts and warnings.
+3. Open HARDBOND **Calendar → Automatic calendar feed**. It starts paused. Click **Refresh TimeTree** and review the timestamps, counts, conflicts and warnings. This action reads the configured feed; it does not authenticate to or scrape a private webpage. An unconfigured connection or overlapping manual refresh returns an explicit error instead of success.
 4. Enable automatic checks after the source and result are correct. This polls every five minutes; provider refresh schedules and Cron timing add latency. It is not instant delivery.
 
 The app's outgoing calendar subscription is a different feature: it sends HARDBOND dates to a phone. Do not configure that as the incoming feed, which would create a loop. A supported source feed must be independently supplied.
