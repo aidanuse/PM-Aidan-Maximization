@@ -1,0 +1,352 @@
+[
+  {
+    "id": "A1",
+    "title": "Trailer unload & staging",
+    "instructions": "Phase: Arrival & Setup | Skill level: SOLO after training | Status: DRAFT\nWHAT IT IS: Unloading the trailer and staging the day's equipment where it will be used. First-out gear comes off first so grinding can start without digging.\nYOU NEED: Work gloves [SAFETY]; hand truck/dolly if carried [FLOOR]; the job load list (Trailer Checks tab)\nSET UP: 1. Trailer reversed onto the driveway / work area, opened up.\nCheck the load list before touching anything — you unload to the list, not by memory.\nDO THE WORK: 1. Unload in this order: extension cords, hand grinders, vacuums, then red grinder and generator.\nStage gear at the front of the trailer / near the work area — red grinder, vacuums, generator reachable first.\nKeep walk paths clear — nothing in doorways or on stairs.\nResin kits stay upright, in shade, lids on, until the mixing station is set.\nDONE LOOKS LIKE: Everything on the load list is off the trailer and staged where the lead wants it. Trailer doors can close. Nothing blocking the client's doors or driveway.\nSAFETY: Gloves when handling grinders and kits. Two hands / two people for the red grinder ramp — never muscle it alone. Watch footing on ramps and wet driveways.\nCOMMON MISTAKES: Unloading everything 'just in case' (site becomes a pile, reload takes forever); kits left in direct sun; gear staged in the client's walkway.\nSTOP AND ASK: Anything on the load list is missing from the trailer — tell the lead BEFORE work starts, not when it's needed.\nREPORT BACK: Lead: 'Unload done, everything on the list is here' — or name what's missing.",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "A2",
+    "title": "Power setup — 2 circuits / generator",
+    "instructions": "Phase: Arrival & Setup | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Getting safe, working power to grinders and vacuums. Grinder and vacuum must run on SEPARATE circuits or the breaker trips all day.\nYOU NEED: Extension cords by length [VAC-POWER]; power splitter/adapters [VAC-POWER]; generator [FLOOR-FRONT]; fuel if generator day [per lead]\nSET UP: 1. Ask the lead: house power or generator today?\nIf house: find 2 outlets on DIFFERENT breakers (different rooms / panel legs — lead confirms).\nDO THE WORK: 1. Grinder on circuit 1, vacuum on circuit 2 — always.\nRun cords along walls, out of walk paths, no cord across a doorway without tape/cover.\nGenerator: outside, exhaust away from doors/windows, then cords in.\nTest: start grinder + vacuum together for 10 seconds — no trip = you're set.\nDONE LOOKS LIKE: Both machines run at once without tripping. Cords tidy along walls. Nobody walks on a cord run.\nSAFETY: Never run a generator indoors or in a garage — exhaust kills. No damaged cord — ever: a cut cord gets red-tagged and pulled. Keep cords dry.\nCOMMON MISTAKES: One circuit only (ask the lead, don't share a circuit and hope); daisy-chaining splitters.\nSTOP AND ASK: Breaker keeps tripping after the lead checks; generator won't start; only one working outlet in the building.\nREPORT BACK: Lead: 'Power's up — grinder on one circuit, vacuum on the other, tested.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "A3",
+    "title": "Site protection — masking & tape",
+    "instructions": "Phase: Arrival & Setup | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Covering and taping everything that must stay clean: floors not being coated, trim, doors, cabinets, fixtures. Coating on the wrong surface is permanent.\nYOU NEED: Tape [CONSUME]; masking plastic/paper [CONSUME]; brushes for dust [APPLY]\nSET UP: 1. Walk the area with the lead — he names what gets protected.\nDust off surfaces first — tape won't stick to dust.\nDO THE WORK: 1. Tape edges tight and straight along everything bordering the work area.\nPlastic/paper down on finished floors and fixtures, taped so it can't slide.\nCover door tracks, vents, and anything dust or flake would ruin.\nDONE LOOKS LIKE: Every border is taped clean, protection is secure, no gaps at corners. Looks tidy — the client sees this first.\nSAFETY: Knife/scraper care when cutting plastic/tape near finished surfaces. Ladder rules if taping high — ask before climbing anything.\nCOMMON MISTAKES: Taping over dust (falls off mid-coat); leaving a gap at a corner; plastic loose where someone will walk and skate on it.\nSTOP AND ASK: Any surface you're not sure about — tape it or ask, never guess it can get coated.\nREPORT BACK: Lead: 'Protection's done' — walk it with him before coating starts.",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "A4",
+    "title": "Vacuum setup & bag change",
+    "instructions": "Phase: Arrival & Setup | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Setting up the vacuum so it actually sucks: right vacuum, new bag, clear hose, hooked to the tool. A grinding vacuum with a full bag just blows dust around.\nYOU NEED: Rigid vacuum or G22 [VAC-POWER / FLOOR]; NEW garbage bag for that vacuum [VAC-POWER]; spare bag\nSET UP: 1. Take the vacuum the lead names — Rigid or G22.\nOpen it. Old bag OUT, new bag IN — even if the old one looks half full.\nDO THE WORK: 1. Check the hose is clear (look through it / flex it) and the filter is seated.\nTest suction on your hand — strong or fix it now.\nHook the hose to the grinder/tool it will serve and stage it where the work starts.\nDONE LOOKS LIKE: Vacuum pulls strong, new bag in, hose hooked up, spare bag nearby.\nSAFETY: Respirator ON when changing bags and emptying — concrete dust damages lungs. Bag goes straight into a garbage bag, sealed.\nCOMMON MISTAKES: Skipping the bag change ('looks fine'); filter left loose; hose kinked behind the machine.\nSTOP AND ASK: Suction weak with a new bag and clear hose — tell the lead, don't just work with a bad vacuum.\nREPORT BACK: Lead: 'Vacuum's set, new bag, suction's good.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "B1",
+    "title": "Hand grinding — EDGES",
+    "instructions": "Phase: Prep — Grinding | Skill level: ASSIST+ | Status: FINAL — Aidan's steps 2026-11-02\nWHAT IT IS: Grinding the edges of the floor — the strip along walls, corners, and around posts/doors where the big floor grinder cannot reach. If the edges are not ground the same as the middle, the coating will not stick there and it will peel at the walls first.\nYOU NEED: DeWalt hand grinder [GRIND] — check the blade/disc before you take it; Rigid vacuum OR G22 vacuum [VAC-POWER]; new garbage bag for the vacuum + spare [VAC-POWER]; 2 extension cords [VAC-POWER]; knee pads, respirator, eye goggles, hearing protection [SAFETY]\nSET UP: 1. Take the DeWalt hand grinder, the vacuum, and 2 extension cords from the trailer.\nFind 2 SEPARATE circuits (two outlets on different breakers — ask the lead if you don't know how to tell). Grinder on one, vacuum on the other. Both on one circuit will trip the breaker all day.\nRun the extension cords into place, along walls, out of walk paths.\nOpen the vacuum: take out the old garbage bag and put in a NEW one, even if the old one looks half full.\nClear/check the vacuum — hose clear, filter seated, suction strong on your hand.\nHook the vacuum hose up to the DeWalt hand grinder. No hookup = dust everywhere = you stop.\nSafety gear ON before the grinder starts.\nDO THE WORK: 1. Start where the lead tells you. Work in order along the wall — do not skip around.\nKeep the blade FLAT on the concrete for an even grind. Tilted = grooves and an uneven edge.\nMove slow and steady. Let the machine cut — do not push down hard.\nOverlap each pass by half. No shiny, smooth concrete left behind — ground concrete looks dull and even.\nCorners and tight spots: slow down, keep it flat, get right into the corner.\nWatch the vacuum as you go. If dust starts escaping, stop — bag full, hose blocked, or hookup off. Fix it, then continue.\nWhen your section is done, vacuum the edge you just ground, clean.\nDONE LOOKS LIKE: Edge strip is dull, even, same texture as the ground floor. No shiny spots, no grooves, no dust left sitting on it. Corners done, not skipped.\nSAFETY: KNEE PADS — you'll be on your knees; no pads, no grinding. RESPIRATOR on the whole time — concrete dust damages lungs. EYE GOGGLES — chips fly off the blade. NOISE PROTECTION — grinder + vacuum damage hearing over a day. Keep the cord BEHIND you, never where the blade can reach it. Let the disc stop fully before setting the grinder down.\nCOMMON MISTAKES: Grinder + vacuum on the same circuit (breaker trips all morning); old vacuum bag left in (no suction, dust everywhere); blade tilted (grooved edges the lead must re-do); skipping corners (coating peels at the wall first).\nSTOP AND ASK: Breaker keeps tripping; vacuum loses suction and a new bag doesn't fix it; blade/disc cracked or a segment missing; you hit something in the concrete you don't recognize (pipe, wire, drain).\nREPORT BACK: 'Edges done from [wall] to [wall], vacuum bag changed, ready for your check.'",
+    "sourceStatus": "Owner FINAL · November 2, 2026",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "B2",
+    "title": "Hand grinding — WALLS / foundation",
+    "instructions": "Phase: Prep — Grinding | Skill level: ASSIST+ | Status: DRAFT — needs Aidan's wall steps (Q B3)\nWHAT IT IS: Grinding the foundation walls / wall bases that get coated with the floor. Same idea as edges: the coating only sticks to ground, dull concrete — shiny wall = peeling wall.\nYOU NEED: DeWalt hand grinder [GRIND]; Rigid or G22 vacuum [VAC-POWER]; new vacuum bag [VAC-POWER]; 2 extension cords [VAC-POWER]; knee pads, respirator, SEALED eye goggles, hearing protection [SAFETY]\nSET UP: 1. Same power + vacuum setup as edges (B1): 2 separate circuits, new bag, vacuum hooked to the grinder.\nAsk the lead how far up the wall today's job goes — grind only to that line, evenly.\nDO THE WORK: 1. Blade flat against the wall, slow steady passes, overlap by half.\nWork top-down so dust falls onto what you haven't finished, not onto finished wall.\nCorners where wall meets floor get both cards' care — no shiny triangle left.\nVacuum as you go — wall dust drops straight down onto your ground floor.\nDONE LOOKS LIKE: Wall is dull and even to the marked height, no shiny patches, wall/floor corner fully ground, fallen dust vacuumed off the floor.\nSAFETY: Dust FALLS on wall work — sealed goggles, not open glasses. Respirator on the whole time. Watch your footing in the dust at the wall base. Cord behind you.\nCOMMON MISTAKES: Grinding past the line on one section and short on another; leaving the wall/floor corner shiny; letting wall dust sit on the prepped floor.\nSTOP AND ASK: Wall crumbles, cracks open up, or you find heavy pitting the lead hasn't seen — stop and show him before grinding more.\nREPORT BACK: 'Walls done to the line, corner done, dust vacuumed, ready for check.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "B3",
+    "title": "Hand grinding — STAIRS / tight areas",
+    "instructions": "Phase: Prep — Grinding | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Hand grinding stair treads, risers, landings, and tight areas the big grinder can't reach. Stairs show every shortcut — each step gets ground fully.\nYOU NEED: DeWalt hand grinder [GRIND]; vacuum + new bag [VAC-POWER]; cords [VAC-POWER]; knee pads, respirator, goggles, hearing protection [SAFETY]\nSET UP: 1. Power + vacuum setup as B1 (2 circuits if available, new bag, hooked up).\nLead names the order — usually top step down, so dust falls onto unfinished steps.\nDO THE WORK: 1. Grind each tread flat and fully — nose (front edge) included, it's the highest-wear spot.\nRisers (the vertical face) ground the same, blade flat.\nCorners where tread meets riser and wall: slow, flat, right in.\nVacuum each finished step before moving down.\nDONE LOOKS LIKE: Every tread + riser dull and even, noses done, corners done, steps vacuumed clean as you descend.\nSAFETY: Stairs + cords + kneeling = trip risk: cords routed behind/under control, never loose across steps you're standing on. Full PPE as B1.\nCOMMON MISTAKES: Skipping risers or noses; grinding treads but leaving the wall corners; dust left sitting on finished steps.\nSTOP AND ASK: A step is cracked, loose, or crumbling — stop and show the lead before coating plans are made on it.\nREPORT BACK: 'Stairs done, top to bottom, vacuumed, ready for check.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "B4",
+    "title": "Main floor grinding — RED grinder",
+    "instructions": "Phase: Prep — Grinding | Skill level: EXPERIENCED ONLY — NEVER for temps/trainees | Status: DRAFT — boundary card\nWHAT IT IS: Grinding the main floor with the big red grinder. This is a finesse machine — a bad pass pattern or wrong tooling ruins the prep for the whole job. Temps/trainees do NOT run this machine.\nYOU NEED: — (lead's machine)\nSET UP: Your job around it: keep the vacuum/cord support running if assigned (C1), keep the floor ahead of it clear, and stay out of its path.\nDO THE WORK: NEVER assigned to temps. If the lead is on the red grinder, your work is support: vacuum, cords, tooling help when asked, debris out of the way.\nDONE LOOKS LIKE: —\nSAFETY: Never stand in front of a running floor grinder. Never touch tooling/diamonds on a machine that isn't stopped and unplugged.\nCOMMON MISTAKES: Assuming 'it's just a bigger grinder, I can try it' — you can't, and trying can end the job.\nSTOP AND ASK: If the machine is running wrong (noise, vibration, smell) and the operator hasn't noticed — shout and wave, don't reach for it.\nREPORT BACK: 'Understood — support only' is the whole report for this card.",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "experienced",
+    "revision": 1
+  },
+  {
+    "id": "B5",
+    "title": "Tooling change — diamonds / PCDs",
+    "instructions": "Phase: Prep — Grinding | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Swapping the grinding tooling: diamonds by grit (16/30/60/80) or PCDs for coating/laitance removal, and checking every segment before the machine runs.\nYOU NEED: Diamonds boxes by grit [GRIND]; PCD box [GRIND]; machine wrench/tools [GRIND]; gloves [SAFETY]\nSET UP: 1. Machine STOPPED and UNPLUGGED before hands go near tooling — no exceptions.\nLead names the tooling + grit for this pass.\nDO THE WORK: 1. Remove the old set, put it back in ITS labeled box — grits never mix in one box.\nFit the new set fully, every plate seated and tight.\nCheck EVERY segment/disc: intact, no cracks, none missing. A damaged segment does not go on the floor.\nSpin-test per the lead before the pass starts.\nDONE LOOKS LIKE: Full matching set fitted and tight, every segment checked, old set boxed in the right grit box.\nSAFETY: Gloves for tooling (edges are sharp). Machine unplugged — treat 'just switching it off' as still live until the plug is out.\nCOMMON MISTAKES: Mixing grits in a box (next job's pass is ruined); one odd segment in the set; tooling left loose on the floor to get stepped on/kicked.\nSTOP AND ASK: Any segment cracked or missing; a plate won't seat; you're handed tooling you can't identify — ask, don't guess by looks.\nREPORT BACK: 'Tooling changed to [grit/PCD], all segments checked, old set boxed.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "B6",
+    "title": "Crack chasing",
+    "instructions": "Phase: Prep — Grinding | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Opening up cracks with a blade/drill so filler can get IN and bond, instead of sitting on top of a hairline and popping out later.\nYOU NEED: Hammer drill / chase blade setup per lead [GRIND]; vacuum [VAC-POWER]; respirator, goggles, hearing protection, knee pads [SAFETY]\nSET UP: 1. Power + vacuum as B1.\nLead walks the cracks with you — which ones get chased, which ones don't.\nDO THE WORK: 1. Follow the crack fully, end to end — a half-chased crack is a half-filled crack.\nSteady depth per the lead — open it, don't trench it.\nVacuum the chased crack clean as you finish it — filler goes into a CLEAN crack.\nDONE LOOKS LIKE: Every marked crack opened end to end and vacuumed clean, ready for D2 filling.\nSAFETY: Full grinding PPE (dust is worst at the crack). Blade/drill control — both hands, cord behind you.\nCOMMON MISTAKES: Chasing cracks the lead didn't mark; stopping mid-crack; leaving dust packed in the chase.\nSTOP AND ASK: Crack keeps opening wider/deeper than expected, or you find voids under the slab sound — show the lead before filling plans change.\nREPORT BACK: 'Cracks chased and vacuumed: [list areas], ready to fill.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "B7",
+    "title": "Demo / removal — old coating, tile, glue",
+    "instructions": "Phase: Prep — Grinding | Skill level: JOB-SPECIFIC — lead briefs the method | Status: DRAFT\nWHAT IT IS: Removing what's on the floor now: old coating, tile, glue, paint. Method changes by job — the lead briefs today's method before anyone starts. No generic card replaces that briefing.\nYOU NEED: Per the lead's briefing: PCD tooling [GRIND], scrapers [GRIND], demo tools, garbage bags [CONSUME]\nSET UP: 1. Get the method briefing: machine or hand, how aggressive, what the slab underneath should look like.\nProtection (A3) doubles on demo days — dust and debris go everywhere.\nDO THE WORK: 1. Work to the briefed method, in sections, fully — a half-stripped section is not done.\nDebris bagged as you go, not piled for later.\nWatch the slab as it appears — damage, soft spots, and surprises get shown to the lead the moment you see them.\nDONE LOOKS LIKE: Surface removed to the briefed standard across the whole area, debris out, slab condition reported honestly.\nSAFETY: Full PPE always on demo. Extra care: hidden nails/screws in demo debris — gloves, and look before you grab.\nCOMMON MISTAKES: Going more aggressive than briefed and gouging the slab; burying a problem spot under debris; 'removing' by pushing material into corners.\nSTOP AND ASK: Slab underneath is damaged, wet, or different from what was quoted (asbestos-era tile/mastic suspicion = STOP completely and get the lead).\nREPORT BACK: 'Demo done on [area], debris bagged, slab looks like: [honest description].'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "B8",
+    "title": "Scraping",
+    "instructions": "Phase: Prep — Grinding | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Scraping loose material, drips, glue ridges, and edges the machines left — by hand scraper. The floor gets coated exactly as it sits after scraping; anything you leave becomes part of the floor.\nYOU NEED: Scrapers + spare blades [GRIND]; knee pads, gloves [SAFETY]; garbage bag [CONSUME]\nSET UP: 1. Sharp blade in the scraper — a dull blade slides over ridges instead of cutting them.\nLead names the area; work it in a grid, not random wandering.\nDO THE WORK: 1. Low angle, firm strokes, cut ridges and loose bits off flush.\nHand-check as you go — your palm finds what your eyes miss.\nSweep/vacuum your scrapings out of the area before moving on.\nDONE LOOKS LIKE: Area is flat to a hand-check, no ridges or loose flakes, scrapings gone.\nSAFETY: Blade care: cut away from your body, spare blades handled by the edges. Knee pads — scraping is kneeling work.\nCOMMON MISTAKES: Wandering (missed patches everywhere); dull blade all day; scrapings left to get vacuumed 'later' into the coating prep.\nSTOP AND ASK: Anything that won't scrape because it's bonded INTO a defect — show the lead, it may need grinding or patching, not force.\nREPORT BACK: '[Area] scraped and hand-checked, scrapings out.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "C1",
+    "title": "Vacuuming — EDGES (vacuum man)",
+    "instructions": "Phase: Cleaning | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: You ARE the dust control while hand grinding runs: your vacuum rides with the grinder so dust never gets airborne or settles back on prepped floor.\nYOU NEED: The grinder's vacuum — Rigid or G22 [VAC-POWER]; spare bags [VAC-POWER]; respirator [SAFETY]\nSET UP: 1. You set the vacuum up first (A4): new bag, strong suction, hose ready.\nPair with your grinder man before he starts — you move when he moves.\nDO THE WORK: 1. Keep the hose hooked to his grinder and untangled — manage his cord + hose so he never stops for them.\nWhen he pauses, vacuum the ground edge clean immediately.\nWatch your suction: dust escaping = bag/hose/hookup problem — fix it on the spot (that's your main job).\nEmpty/check the bag at every break, not when it's already choking.\nDONE LOOKS LIKE: No dust plume while grinding runs, edges clean behind the grinder, grinder man never waits on you.\nSAFETY: Respirator on whenever grinding is running near you. Bag changes as A4 — bag sealed straight into garbage.\nCOMMON MISTAKES: Wandering off while grinding continues; letting the hose kink/pull off; bag so full the vacuum whines — change it before that.\nSTOP AND ASK: Vacuum dies, loses suction for good, or the grinder man is outpacing what one vacuum can hold — tell the lead early.\nREPORT BACK: 'Vacuum kept up, bag changed [x] times, edges clean behind the grinder.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "C2",
+    "title": "Full floor vacuum — HEPA pass before coating",
+    "instructions": "Phase: Cleaning | Skill level: SOLO — gate-checked | Status: DRAFT\nWHAT IT IS: The last clean before any coating touches the floor. Whatever dust is on that floor when coating starts is IN the floor forever. This vacuum is slow, complete, and checked.\nYOU NEED: Large vacuum / HEPA vacuum [FLOOR / VAC-POWER]; NEW bag [VAC-POWER]; hand brush [APPLY]; respirator [SAFETY]\nSET UP: 1. NEW bag in — a coating vacuum never starts on yesterday's bag.\nFloor must be fully prepped and scraped first — if prep isn't finished, this isn't your start signal; ask the lead.\nDO THE WORK: 1. Work the floor in lanes, overlapping, wall to wall — pattern, not wandering.\nEdges and corners TWICE — dust hides there.\nSlow down: this pass is about pickup, not speed.\nAfter lanes: brush + vacuum door tracks, ledges, and anywhere dust settled.\nHand-check / light-check per the lead before you call it done.\nDONE LOOKS LIKE: Whole floor lane-vacuumed, edges double-done, no visible dust anywhere, ready for the lead's prep gate check (F3).\nSAFETY: Respirator on — you're stirring the finest dust of the day. Empty the bag outside the prepped area, sealed.\nCOMMON MISTAKES: Rushing lanes; edges once; vacuuming BEFORE patching/scraping is actually done (you'll do it twice and trust it less).\nSTOP AND ASK: You find dust you cannot remove (damp patches, dust bleeding from cracks) — stop before coating, show the lead.\nREPORT BACK: 'Floor vacuumed wall to wall, edges twice, ready for the gate check.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "C3",
+    "title": "Dust & wipe-down",
+    "instructions": "Phase: Cleaning | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Wiping dust off walls, ledges, tops of fixtures, and door tracks near the work area so it can't fall or blow into wet coating later.\nYOU NEED: Wipes [CONSUME]; rags [CONSUME]; small vacuum or brush [APPLY]\nSET UP: 1. Do this AFTER grinding in the area stops and BEFORE coating starts — order matters.\nTop-down: highest surfaces first.\nDO THE WORK: 1. Wipe ledges, wall tops, window sills, door tracks, fixture tops bordering the floor.\nAnything you knock loose falls to the floor — C2 vacuum comes after you if it's a coat day; confirm order with the lead.\nDONE LOOKS LIKE: Bordering surfaces dust-free to a hand-wipe check (rag comes away clean).\nSAFETY: Respirator if dust is still airborne. No wet wipes on surfaces near a floor about to be coated unless the lead says so — moisture is the enemy.\nCOMMON MISTAKES: Wiping after the floor's final vacuum (dust rains onto a clean floor); dry-wiping in circles that just move dust around.\nSTOP AND ASK: Dust keeps coming from somewhere (vent, open door draft) — tell the lead before coating, not during.\nREPORT BACK: 'Wipe-down done, rag checks clean.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "C4",
+    "title": "Garbage & debris — all day",
+    "instructions": "Phase: Cleaning | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Keeping the site clean WHILE work runs: bags, demo debris, used consumables. A clean site is faster, safer, and it's what the client judges at 4 PM.\nYOU NEED: Garbage bags [CONSUME]; gloves [SAFETY]\nSET UP: 1. One garbage bag staged open near the work, one spare. Full bag never sits — it's tied and out.\nDO THE WORK: 1. Collect as you go: tape backs, wipe waste, scrapings, demo bits.\nFull bags to the agreed spot (trailer/dumpster per lead) — never piled by the client's door.\nEnd of each phase: walk your area, leave it clean for the next phase.\nDONE LOOKS LIKE: No loose debris anywhere in the work area at any check; bags staged and moving out all day.\nSAFETY: Gloves for debris (hidden sharp edges/nails). Lift bags with legs — demo bags are heavy.\nCOMMON MISTAKES: One giant pile 'for later'; bags left in the client's walkway/driveway show-zone; sharp debris loose in a thin bag waiting to tear.\nSTOP AND ASK: You find something that isn't HARDBOND garbage (client property in the work zone, hazardous-looking material) — hand it to the lead, don't bin it.\nREPORT BACK: 'Site's clean, [x] bags out.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "D1",
+    "title": "Patching — holes, pitting, divots",
+    "instructions": "Phase: Repairs | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Filling holes, pitting, and damaged areas so the finished floor is flat and the coating isn't bridging holes. RULE OF THE TRADE HERE: prep is 100% before the next step — skipped patching has forced FULL RECOATS on this crew.\nYOU NEED: Patch material [REPAIR]; trowels [APPLY]; scraper [GRIND]; vacuum [VAC-POWER]; gloves, knee pads [SAFETY]\nSET UP: 1. Area ground + vacuumed FIRST — patch goes on clean, prepped concrete only.\nLead names the product + consistency for today; watch his first patch before you mix/fetch.\nDO THE WORK: 1. Work patch into the hole/pit fully — no air pocket under a skin of material.\nStrike it flat/flush with the surrounding floor — a patch hump is tomorrow's bump under coating.\nDo the area COMPLETELY: walk it, hand-check, mark missed pits, do them now.\nPer product: respect the cure before grinding/sanding it flush (lead calls timing).\nDONE LOOKS LIKE: Every hole/pit in the area filled flush, no skins over voids, area ready for flush-grind/vacuum.\nSAFETY: Gloves with patch resins — skin contact sensitizes over time; wash at breaks. Knee pads — patching is floor-level work.\nCOMMON MISTAKES: Skipping 'small' pitting (it telegraphs through coating); patching over dust; humps left because 'the coating will hide it' — it won't.\nSTOP AND ASK: Pitting far worse than quoted once you start, or a hole that keeps swallowing material (void) — show the lead.\nREPORT BACK: 'Patching done on [area], all of it, ready for flush check.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "D2",
+    "title": "Crack filling",
+    "instructions": "Phase: Repairs | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Filling chased cracks flush so they don't telegraph through the finished floor or reopen as lines in the coating.\nYOU NEED: Crack filler [REPAIR]; trowel/scraper [APPLY]; vacuum [VAC-POWER]; gloves, knee pads [SAFETY]\nSET UP: 1. Cracks must be chased (B6) and vacuumed clean first — filler into dust is filler on dust.\nLead names the filler + working method today.\nDO THE WORK: 1. Fill the full length, working material INTO the chase, not across the top.\nStrike flush — excess smeared wide becomes a visible band.\nRe-check after it sets per the lead: any sink-back gets a second pass now, not after coating.\nDONE LOOKS LIKE: Every chased crack filled flush its whole length, no smear bands, no sink gaps.\nSAFETY: Gloves (resin fillers). Knee pads.\nCOMMON MISTAKES: Bridging the top of the chase; wide smears; calling it done before the set/re-check.\nSTOP AND ASK: Crack moves/creaks underfoot or filler won't set — lead sees it before coating.\nREPORT BACK: 'Cracks filled: [areas], re-checked after set.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "D3",
+    "title": "Detail repair — edges, drains, posts",
+    "instructions": "Phase: Repairs | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: The small repairs machines and big trowels miss: around drains, posts, door frames, and corners. Details are where a floor looks cheap or looks pro.\nYOU NEED: Patch/filler per lead [REPAIR]; small trowels + brushes [APPLY]; tape [CONSUME]; gloves, knee pads [SAFETY]\nSET UP: 1. Lead walks the details with you and names each one — details are assigned, not discovered mid-coat.\nTape-protect drains/fixtures that must stay clean (A3 method).\nDO THE WORK: 1. One detail at a time, finished fully before the next.\nKeep repair material off finished/protected surfaces — wipe slips immediately per lead.\nMatch the surrounding prep — a smooth patch in a ground field shows.\nDONE LOOKS LIKE: Every named detail repaired flush and clean, protection intact, nothing smeared.\nSAFETY: Gloves; knee pads. Care with blades/tape near fixtures.\nCOMMON MISTAKES: Rushing details because they're small; leaving one 'for later' that the coat then reaches first.\nSTOP AND ASK: A detail is worse inside than it looked (rotted frame, moving drain) — lead decides, you don't bury it.\nREPORT BACK: 'Details done: [list], ready for check.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "E1",
+    "title": "Mixing station",
+    "instructions": "Phase: Coating | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Running the mix: measuring, mixing, and timing kits so the floor crew never waits and no kit dies in the bucket. Pot life is a clock — some of our resins give you 10–12 minutes, not 'whenever'.\nYOU NEED: Mixing drill + paddles [MIX]; buckets [MIX]; measuring containers [MIX]; pot-life TIMER [MIX]; gloves + goggles [SAFETY]; the job's kits staged by the lead [COAT]\nSET UP: 1. Kits staged by system — you mix ONLY what the lead calls, in the order he calls it.\nTimer at the station, visible. Bucket + paddle clean before the first mix.\nDO THE WORK: 1. Measure EXACTLY per the product's ratio (lead states it for today's product) — never eyeball, never split a kit where the product demands full units.\nMix fully: sides, bottom, corners — unmixed material in a corner ruins a section.\nSTART THE TIMER the moment parts combine. Call the time out.\nDeliver the kit to the floor immediately and say its age ('mixed 2 minutes ago').\nBucket/paddle cleaned or swapped before the next mix — old resin contaminates new.\nDONE LOOKS LIKE: Every kit mixed exact, timed, and on the floor fresh; floor crew never stands waiting; no kit lost to pot life at the station.\nSAFETY: GOGGLES + GLOVES for mixing — resin in eyes/skin is the station's real hazard. Respirator if the lead calls it for the product/space.\nCOMMON MISTAKES: Eyeballing ratios; 'one quick extra section' from a dying kit; unmixed corners; timer forgotten on a fast product (PE-VRM pot life is 10–12 min).\nSTOP AND ASK: Anything unclear about ratio/product/order — ASK BEFORE YOU MIX. A mixed wrong kit is garbage and everyone's time.\nREPORT BACK: 'Kit [n] mixed at [time], on the floor at [age].' — every kit, out loud.",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "E2",
+    "title": "Material runner",
+    "instructions": "Phase: Coating | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Keeping the coating crew fed: kits, flake boxes, rollers, buckets — at their elbows before they ask. Coating can't pause; a starved squeegee man is a ruined section.\nYOU NEED: Whatever the phase needs: kits [COAT]; flake boxes [FLAKE]; rollers [APPLY]; buckets [MIX]; spike shoes if swapping [APPLY]\nSET UP: 1. Before the coat starts: stage the phase's materials at the edge of the work, in USE ORDER.\nKnow the next thing they'll need before they need it — watch the work, not your phone.\nDO THE WORK: 1. Deliver to the edge — NEVER walk onto wet coating except in spike shoes when told.\nOpen/stage the next kit or flake box ahead of the need.\nTake empties AWAY — the work edge stays clear.\nCall out what you're bringing ('next flake box in 2 minutes') so nobody wonders.\nDONE LOOKS LIKE: Coating crew never stops for material; work edge clear of empties; next item always staged.\nSAFETY: Spike shoes ONLY when told and only on wet coating — spikes on finished/dry areas or client floors destroy surfaces. Kits are heavy — lift properly, two hands.\nCOMMON MISTAKES: Watching instead of anticipating; stepping onto wet floor in boots (ends jobs); staging everything at once into a clutter pile.\nSTOP AND ASK: Stock runs short mid-coat (kits/flake won't finish the area) — tell the lead THE MOMENT you see it, not when the last box opens.\nREPORT BACK: 'You're set — next [item] staged, [x] kits left after this one.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "E3",
+    "title": "Basecoat — squeegee",
+    "instructions": "Phase: Coating | Skill level: EXPERIENCED ONLY | Status: DRAFT — boundary card\nWHAT IT IS: Spreading the basecoat at the right film thickness with the squeegee. Coverage is spec'd (a kit covers what it covers) — spreading thin to 'make it stretch' breaks the product's rating and the floor. Experienced men only.\nYOU NEED: — (lead's tools)\nSET UP: Your job around it: mixing station (E1) or runner (E2) if assigned — the squeegee man must never leave the floor to fetch.\nDO THE WORK: NEVER assigned to temps/trainees. Support roles only, done exactly as briefed.\nDONE LOOKS LIKE: —\nSAFETY: Never step on wet coating without spike shoes + the lead's say-so.\nCOMMON MISTAKES: Offering to 'just spread a bit' — untrained spreading is how film thickness dies.\nSTOP AND ASK: Kit count won't cover the area at spec — if you notice it on the station/runner, say it immediately.\nREPORT BACK: 'Support only — station/runner covered' is your report.",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "experienced",
+    "revision": 1
+  },
+  {
+    "id": "E4",
+    "title": "Cross roll — 18in squeegee",
+    "instructions": "Phase: Coating | Skill level: NEVER for temps/trainees — finesse task | Status: DRAFT — boundary card\nWHAT IT IS: The cross-roll pass that evens the coat. It takes finesse to get 100% right — too much or too little pressure leaves lines in the finished floor. Named off-limits (this includes Shahmir until cleared).\nYOU NEED: — (lead's tools)\nSET UP: Your job: keep material coming (E2), watch edges/lighting if asked, stay off the coat.\nDO THE WORK: NEVER assigned to temps/trainees. No exceptions because the day is busy.\nDONE LOOKS LIKE: —\nSAFETY: Stay off wet coating without spikes + lead instruction.\nCOMMON MISTAKES: Grabbing the squeegee during a break 'to help' — a 'helpful' pass can line a whole section.\nSTOP AND ASK: If you see a miss/line the roller hasn't reached yet — point it out to the LEAD, don't fix it yourself.\nREPORT BACK: 'Understood — off the roll, support only.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "experienced",
+    "revision": 1
+  },
+  {
+    "id": "E5",
+    "title": "Coating edges & walls — cutting in",
+    "instructions": "Phase: Coating | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Brushing/rolling the coating onto edges, wall bases, and details the squeegee can't reach, keeping pace just ahead of/alongside the main coat so wet edges meet wet edges.\nYOU NEED: Chip brushes + small rollers [APPLY]; the phase's mixed material (from E1 station); tape check from A3; gloves [SAFETY]; spike shoes if told [APPLY]\nSET UP: 1. Protection/tape checked before material arrives — you can't tape into wet coating.\nWork the section the lead names, in his order — edge work out of sequence strands a wet edge.\nDO THE WORK: 1. Load, lay, and even the material to match the field coat — no ridges at your line, no starved edges.\nKeep a wet edge: your section must meet the main coat while both are wet.\nMaterial on tape/trim/fixtures gets cleaned the second it happens, per the lead.\nDONE LOOKS LIKE: Edges + walls coated evenly, meeting the field wet, no misses at corners, nothing on protected surfaces.\nSAFETY: Gloves — you'll be closest to the resin all day. Kneeling pads when working low edges.\nCOMMON MISTAKES: Falling behind the main coat (dry seam line); ridges left at the squeegee line; 'catching up' by slopping extra on corners.\nSTOP AND ASK: Main coat is gaining on you and you can't hold the wet edge — call it early so the lead rebalances crew.\nREPORT BACK: 'Edges/walls done to [point], wet edge held.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "E6",
+    "title": "Flake broadcast",
+    "instructions": "Phase: Coating | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Throwing decorative flake into the wet basecoat to FULL coverage (broadcast to rejection): the floor should look like flake, not like coating with sprinkles — where the job spec calls full broadcast.\nYOU NEED: Flake boxes for today's colour [FLAKE]; broadcast bucket [FLAKE]; spike shoes [APPLY]; gloves [SAFETY]\nSET UP: 1. Boxes staged at the work edge in order (E2 keeps you fed).\nSpike shoes ON before you step onto wet coat — and you enter/exit where the lead says.\nDO THE WORK: 1. Handfuls tossed UP so flake rains down evenly — never thrown forward in clumps.\nWork backwards across your section, keeping the wet edge covered as it advances.\nFull coverage: no wet coating showing through when you finish a section. Walk the light — thin spots show at an angle.\nBroadcast rate matters: follow the lead's call for this job (full rejection vs partial % — e.g. some jobs run 10–30% accent blends).\nDONE LOOKS LIKE: Section fully covered to the called rate, even — no clumps, no thin windows, no footprints in bare coat.\nSAFETY: Spike shoes on wet coat only, and shuffled — lifting a spiked foot straight through thin coat tears it. Gloves optional but flake dust dries skin.\nCOMMON MISTAKES: Clumping from throwing forward; thin spots at the far edge of a section; running low and quietly stretching flake — NEVER stretch; call the shortage.\nSTOP AND ASK: Flake won't finish the area, colour/box looks wrong vs the job, or you step wrong and mark the coat — lead hears it immediately.\nREPORT BACK: 'Broadcast done to [point], coverage full, [x] boxes left.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "E7",
+    "title": "Flake scrape & reclaim",
+    "instructions": "Phase: Coating | Skill level: SOLO after training | Status: DRAFT\nWHAT IT IS: After the flake coat cures: scraping down the loose/high flake and vacuuming so the surface is flat and ready for topcoat. What you scrape loose gets vacuumed — clean reclaim may be saved per the lead.\nYOU NEED: Scrapers [GRIND]; vacuum + fresh bag [VAC-POWER]; buckets for reclaim [FLAKE]; knee pads, respirator [SAFETY]\nSET UP: 1. ONLY when the lead confirms the coat is cured enough — scraping early tears the floor.\nFresh vacuum bag — this pass loads a vacuum fast.\nDO THE WORK: 1. Scrape flat passes across the whole area — knock down high flake, don't gouge.\nVacuum the whole area thoroughly — loose flake left behind ends up in the topcoat.\nReclaim: save only what the lead says is clean enough; contaminated flake is garbage, no debate at the bucket.\nDONE LOOKS LIKE: Surface evenly scraped, fully vacuumed, no loose flake anywhere, ready for topcoat inspection.\nSAFETY: Respirator — scraped flake + dust. Knee pads.\nCOMMON MISTAKES: Scraping before the cure call; saving dirty reclaim to 'help the count'; a quick vacuum that leaves drifts in corners.\nSTOP AND ASK: Flake comes UP in sheets or the coat feels soft anywhere — stop, lead checks cure before anyone else scrapes it.\nREPORT BACK: 'Scraped + vacuumed, reclaim: [saved/garbage], ready for topcoat check.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "E8",
+    "title": "Topcoat application",
+    "instructions": "Phase: Coating | Skill level: EXPERIENCED ONLY | Status: DRAFT — boundary card\nWHAT IT IS: The final clear coat that seals the floor. It's the surface the client sees and touches — misses, lines, and contamination all show forever. Experienced men only.\nYOU NEED: — (lead's tools)\nSET UP: Your job around it: runner (E2), lighting/watch support if assigned as E9, and keeping EVERYTHING (dust, people, pets, doors) away from the wet floor.\nDO THE WORK: NEVER assigned to temps/trainees. Support roles only.\nDONE LOOKS LIKE: Finished topcoat must stay untouched: foot traffic 1 day, cars/heavy 2 days — you are part of enforcing that at the door.\nSAFETY: Opening a door/window 'for air' on your own — dust and bugs land in wet topcoat. Ventilation changes are the lead's call only.\nCOMMON MISTAKES: Anything falls/blows into the wet topcoat, or someone is about to walk on it — you stop it / report it instantly.\nSTOP AND ASK: 'Support covered — floor guarded.'\nREPORT BACK:",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "experienced",
+    "revision": 1
+  },
+  {
+    "id": "E9",
+    "title": "Topcoat support — spikes, light, watch",
+    "instructions": "Phase: Coating | Skill level: ASSIST+ | Status: DRAFT\nWHAT IT IS: Supporting the topcoat pass: holding light at the right angle, watching for misses and debris, and moving in spikes only where told. Topcoat misses hide at straight-on views and show at an angle — you're the angle.\nYOU NEED: Work light [VAC-POWER]; spike shoes [APPLY]; lint-free wipe per lead [CONSUME]\nSET UP: 1. Light positioned per the applicator — low angle across the surface.\nKnow the pass pattern before it starts so your light stays ahead of it.\nDO THE WORK: 1. Track the applicator: light angled, call misses ('holiday at the post') the moment you see them.\nWatch for hairs, bugs, dust nibs — point, don't touch, unless the lead hands you the fix.\nIn spikes: shuffle, minimal steps, exit on the called path.\nDONE LOOKS LIKE: No missed patches in the finished light-check; applicator never waits for light; no stray prints in or out.\nSAFETY: Spikes discipline as E6/E8. Never lean over wet coat with loose clothing/tools dangling.\nCOMMON MISTAKES: Chasing a miss into the middle yourself; light straight-on (hides everything); stepping out the wrong path.\nSTOP AND ASK: A defect you can't classify, or contamination spreading (fisheyes) — lead hears it on the first patch, not the tenth.\nREPORT BACK: 'Watch kept — misses called: [none/list], floor clear.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "F1",
+    "title": "Conditions readings",
+    "instructions": "Phase: Conditions & QC | Skill level: ASSIST+ — trained only | Status: DRAFT\nWHAT IT IS: Reading and recording the slab's conditions: air temp, slab temp (IR gun), humidity, moisture. Coating decisions are product-specific — these numbers decide GO / heat / hold, and they're written down, never remembered.\nYOU NEED: IR slab thermometer [TEST]; moisture meter [TEST]; humidity/air reader [TEST]; hardness tester if called [TEST]; the Daily Sheet / job notes to write into\nSET UP: 1. Take the TEST grab-box — it goes in first and out first for a reason.\nLead names when readings happen (arrival, pre-coat at the day's actual peak, etc.).\nDO THE WORK: 1. Slab IR: readings across the area (corners + middle + the coldest spot you can find) — one warm reading in the sun is not the slab.\nAir temp + humidity at floor level in the space.\nMoisture per the meter + lead's method where the job calls for a test.\nWRITE IT DOWN with the time, immediately: air / slab IR (low reading) / humidity / moisture.\nDONE LOOKS LIKE: A written, timed set of readings the lead can make the call from — worst-spot numbers included, not just averages.\nSAFETY: No safety items beyond site standard. Careful with meter pins/points.\nCOMMON MISTAKES: One reading in the warmest spot; numbers 'remembered' until lunch; rounding a 6 into a 7 — the floor doesn't care about your optimism.\nSTOP AND ASK: A reading looks wrong vs the space (meter acting up, slab wet somewhere unexpected) — retake once, then show the lead.\nREPORT BACK: 'Readings at [time]: air [x], slab low [x], humidity [x]%, moisture [x] — written down.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "F2",
+    "title": "Photos — before / during / after",
+    "instructions": "Phase: Conditions & QC | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Shooting the job record: same angles before, during, and after. Photos settle 'was that crack already there' and prove the prep nobody sees under a finished floor.\nYOU NEED: Phone/camera; the job's photo list if the lead names specific shots\nSET UP: 1. BEFORE anything moves: walk the job and shoot every wall/section + close-ups of existing damage, cracks, stains.\nDO THE WORK: 1. Same angles at each phase the lead calls (post-grind prep is the money shot — it disappears under coating).\nClose-ups: defects before repair, repairs after, conditions meter readings if asked.\nAFTER: finished floor, same angles as the befores, good light.\nDONE LOOKS LIKE: A matched before/during/after set exists for the job, defects documented, nothing key left unshot.\nSAFETY: Client privacy: shoot the WORK — no people, no family photos/valuables in frame if avoidable. Photos of a client's home stay work-only.\nCOMMON MISTAKES: Only pretty afters (useless in a dispute); prep phase skipped; shooting from different angles so pairs don't compare.\nSTOP AND ASK: Existing damage worse than expected (it needs documenting + lead's eyes BEFORE work covers it).\nREPORT BACK: 'Photos done: before [x], prep [x], after pending/done.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "F3",
+    "title": "Prep gate check — 100% before next phase",
+    "instructions": "Phase: Conditions & QC | Skill level: LEAD ONLY | Status: DRAFT — boundary card\nWHAT IT IS: The walk that decides whether the next phase starts. HARDBOND rule: prep is 100% before the next step — no exceptions for the clock. Skipped patching/prep has forced full recoats.\nYOU NEED: — (lead's check)\nSET UP: Your job: your areas presented honestly — done means done, and the thing you're unsure about gets pointed at, not hidden.\nDO THE WORK: LEAD ONLY. Nobody starts the next phase on their own call, ever. If the lead hasn't cleared it, it isn't cleared.\nDONE LOOKS LIKE: All crew can go home knowing the floor was right.\nSAFETY: —\nCOMMON MISTAKES: Starting to 'get ahead' on the next phase before the gate — you're not ahead, you're redoing it.\nSTOP AND ASK: You already know a spot will fail the gate — say it before he finds it. That honesty is the job.\nREPORT BACK: '[Area] ready for your gate check — and watch [spot], I'm not sure about it.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "lead",
+    "revision": 1
+  },
+  {
+    "id": "G1",
+    "title": "Site cleanup",
+    "instructions": "Phase: Closeout | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Leaving the client's space clean: floors swept, debris out, their stuff respected. The last thing the client sees is how you left — it decides the review more than the middle of the job.\nYOU NEED: Brooms/dustpan, garbage bags [CONSUME]; vacuum for a finish pass if called [VAC-POWER]\nSET UP: 1. Cleanup starts when the lead calls closeout — not while coating decisions are still live.\nDO THE WORK: 1. Work area + paths + driveway/trailer zone: swept and clear.\nClient's items back where they were if anything was moved (per lead).\nAll garbage OUT to the agreed spot/trailer — nothing left 'for the client to toss'.\nDONE LOOKS LIKE: Site visibly cleaner than mid-job tidy: no debris, no bags, no gear marks, paths clear.\nSAFETY: Gloves for debris. Care moving gear past finished surfaces — a scuffed wall at 5 PM is still a scuffed wall.\nCOMMON MISTAKES: Sweeping dust INTO the finished floor's edge; leaving tape backs and wipe waste in corners.\nSTOP AND ASK: You find damage — yours, or pre-existing you can't prove — show the lead before leaving, with photos if F2 applies.\nREPORT BACK: 'Site cleaned, garbage out, paths clear.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "G2",
+    "title": "Trailer reload — by zone & code",
+    "instructions": "Phase: Closeout | Skill level: SOLO — checked | Status: DRAFT\nWHAT IT IS: Loading the trailer back the way the Trailer Map says: every item in its labeled box, box in its coded spot. Tomorrow's load time is decided by tonight's reload.\nYOU NEED: Trailer Map tab (zones/codes); Return Checklist (Trailer Checks tab); red tags for low/empty items\nSET UP: 1. Reload to the Map + Return Checklist — not to 'where it fit'.\nDO THE WORK: 1. Partial kits marked BEFORE they go on the shelf: product / date / job / amount left — on the lid.\nDirty tools separated — nothing dirty back on a clean shelf.\nVacuum bags checked; full out, new staged. Cords coiled the standard way; damaged cord red-tagged OUT.\nLast-one-taken items get a RED TAG — that's tomorrow's buy list.\nHeavy low, resins upright in the tray, floor spots back to their tape marks.\nDONE LOOKS LIKE: Trailer looks like the shelf photos in the Trailer Map tab. Doors close on order, not on a pile.\nSAFETY: Two-person lifts for the red grinder/heavy kits on ramps. Watch footing — end of day is when injuries happen.\nCOMMON MISTAKES: 'Mostly back'; partials unmarked (tomorrow they're mystery kits); red tags skipped because you're tired — the tag IS the job.\nSTOP AND ASK: Anything missing, broken, or borrowed-not-returned — it goes on the Return Checklist + to the lead tonight, not discovered next job.\nREPORT BACK: 'Reload done to the map. Red tags: [list or none]. Missing/broken: [list or none].'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "G3",
+    "title": "Tape off & cure signage",
+    "instructions": "Phase: Closeout | Skill level: SOLO | Status: DRAFT\nWHAT IT IS: Closing the finished floor properly: taped off so nobody walks it, and the cure rules left where the client will see them — foot traffic 1 day, cars/heavy traffic 2 days.\nYOU NEED: Tape [CONSUME]; cure note/signage per lead\nSET UP: 1. Only after the final coat is down and the lead confirms the floor is in cure.\nDO THE WORK: 1. Tape across every entry to the floor — doorways, stairs, garage doors — no polite gap someone will 'just step through'.\nCure note placed as the lead directs (door/client handoff): 1 day before foot traffic, 2 days before cars/heavy items.\nCheck exterior doors/garage door are secured as the lead directs.\nDONE LOOKS LIKE: Every entry taped, cure note in place, no path onto the floor left open.\nSAFETY: Never step onto the curing floor to place tape — work from the edges/thresholds.\nCOMMON MISTAKES: One entry left untaped ('nobody uses that door' — somebody does); cure times told from memory wrongly — the note says 1 day feet / 2 days cars.\nSTOP AND ASK: An entry that can't be taped (traffic must pass) — lead decides the barrier, you don't improvise one.\nREPORT BACK: 'Taped off, cure note left: 1 day feet, 2 days cars.'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  },
+  {
+    "id": "G4",
+    "title": "End-of-day report",
+    "instructions": "Phase: Closeout | Skill level: EVERYONE — every day | Status: DRAFT\nWHAT IT IS: Your 60-second report to the lead before you leave: what you finished, what you didn't, what broke or ran out. Surprises belong at 5 PM today, not at 8 AM tomorrow on the next job.\nYOU NEED: —\nSET UP: 1. Think it through before the lead asks: DONE / NOT DONE / PROBLEMS / BROKEN-LOW, for YOUR assignments.\nDO THE WORK: 1. Report in that order, honestly — 'not done' with a reason beats 'done' that isn't.\nBroken/low/missing goes in the same breath — it feeds the buy list and tomorrow's load.\nIf your check-offs are in the Crew Picker, mark Done / Not done / Partial there as the lead directs.\nDONE LOOKS LIKE: Lead knows the true state of every assignment you held, and the trailer/buy list reflect it.\nSAFETY: —\nCOMMON MISTAKES: Reporting the day you wish you'd had; assuming someone else mentioned the broken/low item.\nSTOP AND ASK: Anything you know will bite tomorrow (cure worry, low stock, a defect you covered) — tonight is when it gets said. Always.\nREPORT BACK: 'My report: done [x], not done [y + why], broken/low [z].'",
+    "sourceStatus": "Source DRAFT",
+    "approved": false,
+    "reviewedBy": "",
+    "restriction": "trained",
+    "revision": 1
+  }
+]

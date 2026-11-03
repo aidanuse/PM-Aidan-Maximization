@@ -3,6 +3,10 @@ const PREFIX = "hardbond:v1:";
 const CACHE_KEY = `${PREFIX}state`;
 const QUEUE_KEY = `${PREFIX}outbox`;
 const COLLECTIONS = new Set([
+  "workers",
+  "taskCards",
+  "crewDays",
+  "trailerChecks",
   "jobs",
   "inventory",
   "dailySheets",

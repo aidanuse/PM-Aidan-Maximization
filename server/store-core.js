@@ -1,5 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
+import {
+  planSignature,
+  rowProblems,
+  renderBrief,
+  containsMoney,
+} from "../shared/crew.js";
 import { materialTotals } from "../shared/domain.js";
 
 export class HttpError extends Error {
@@ -64,6 +70,90 @@ const base = {
 };
 
 export const recordSchemas = {
+  taskCards: z
+    .object({
+      ...base,
+      title: z.string().trim().min(1).max(300),
+      instructions: z.string().trim().min(1).max(20000),
+      sourceStatus: text(200),
+      approved: z.boolean().default(false),
+      reviewedBy: text(200),
+      restriction: z
+        .enum(["trained", "experienced", "lead"])
+        .default("trained"),
+      revision: z.number().int().positive().default(1),
+    })
+    .strict(),
+  workers: z
+    .object({
+      ...base,
+      name: z.string().trim().min(1).max(200),
+      phone: text(100),
+      role: z.enum(["helper", "experienced", "lead"]).default("helper"),
+      active: z.boolean().default(true),
+      availability: text(2000),
+      transport: text(2000),
+      notes: text(3000),
+      clearances: z
+        .record(z.enum(["SOLO", "ASSIST", "NEVER", "NOT ASSESSED"]))
+        .default({}),
+    })
+    .strict(),
+  crewDays: z
+    .object({
+      ...base,
+      date: date.refine(Boolean, "Choose a date"),
+      leadContact: text(500),
+      crew: z
+        .array(
+          z
+            .object({
+              workerId: id,
+              available: z.boolean().default(false),
+              callTime: clock,
+              transport: text(2000),
+              instructions: text(3000),
+              status: z.enum(["draft", "sent", "confirmed"]).default("draft"),
+              brief: text(100000),
+              confirmedAt: timestamp,
+              tasks: z
+                .array(
+                  z
+                    .object({
+                      id,
+                      jobId: text(150),
+                      cardId: id,
+                      supervisorId: text(150),
+                      supervisionConfirmed: z.boolean().default(false),
+                      detail: text(2000),
+                      result: z
+                        .enum(["pending", "done", "partial", "not-done"])
+                        .default("pending"),
+                      note: text(3000),
+                      recordedAt: timestamp,
+                    })
+                    .strict(),
+                )
+                .max(35)
+                .default([]),
+            })
+            .strict(),
+        )
+        .max(30)
+        .default([]),
+    })
+    .strict(),
+  trailerChecks: z
+    .object({
+      ...base,
+      date: date.refine(Boolean, "Choose a date"),
+      kind: z.enum(["return", "weekly"]),
+      checkedBy: z.string().trim().min(1).max(200),
+      checks: z.array(z.boolean()).length(6),
+      notes: text(5000),
+    })
+    .strict(),
+
   jobs: z
     .object({
       ...base,
@@ -123,6 +213,8 @@ export const recordSchemas = {
                 .max(30)
                 .default([]),
               handover: text(3000),
+              releasedBy: text(200),
+              releasedAt: timestamp,
             })
             .strict(),
         )
@@ -640,6 +732,162 @@ export function createStoreFromDatabase(db) {
         "Edit the linked Daily Sheet to change this reminder.",
       );
     references(collection, record);
+    if (collection === "jobs") {
+      for (const phase of record.fieldPlan) {
+        const previous = old?.fieldPlan?.find((p) => p.id === phase.id);
+        const signature = (p) =>
+          JSON.stringify(
+            Object.fromEntries(
+              Object.entries(p).filter(
+                ([k]) => !["releasedBy", "releasedAt"].includes(k),
+              ),
+            ),
+          );
+        if (previous && signature(previous) !== signature(phase)) {
+          phase.releasedBy = "";
+          phase.releasedAt = "";
+        }
+        if (phase.releasedBy.trim()) {
+          if (
+            phase.status !== "complete" ||
+            !phase.checks.length ||
+            phase.checks.some((c) => c.status === "unconfirmed")
+          )
+            throw new HttpError(
+              400,
+              "Complete the phase and resolve every check before recording lead release.",
+            );
+          phase.releasedAt =
+            previous?.releasedBy === phase.releasedBy && previous?.releasedAt
+              ? previous.releasedAt
+              : new Date().toISOString();
+        } else phase.releasedAt = "";
+      }
+    }
+    if (collection === "taskCards") {
+      if (record.approved && !record.reviewedBy.trim())
+        throw new HttpError(
+          400,
+          "Name the person who reviewed the instructions and technical requirements.",
+        );
+      const changed =
+        old &&
+        ["instructions", "title", "restriction"].some(
+          (k) => old[k] !== record[k],
+        );
+      record.revision = old ? old.revision + (changed ? 1 : 0) : 1;
+      if (changed) {
+        record.approved = false;
+        record.reviewedBy = "";
+      }
+    }
+    if (collection === "crewDays") {
+      if (
+        getRecords("crewDays").some(
+          (d) => d.date === record.date && d.id !== record.id,
+        )
+      )
+        throw new HttpError(
+          409,
+          "A plan already exists for this date. Open that plan.",
+        );
+      if (
+        new Set(record.crew.map((r) => r.workerId)).size !== record.crew.length
+      )
+        throw new HttpError(400, "Each worker gets one combined day brief.");
+      const state = {
+        workers: getRecords("workers"),
+        taskCards: getRecords("taskCards"),
+        jobs: getRecords("jobs"),
+      };
+      const changed = old && planSignature(old) !== planSignature(record);
+      for (const row of record.crew) {
+        if (!state.workers.some((w) => w.id === row.workerId))
+          throw new HttpError(400, "Worker no longer exists.");
+        if (new Set(row.tasks.map((t) => t.id)).size !== row.tasks.length)
+          throw new HttpError(400, "Duplicate assignment IDs.");
+        for (const task of row.tasks) {
+          const previousTask = old?.crew
+            .find((r) => r.workerId === row.workerId)
+            ?.tasks.find((t) => t.id === task.id);
+          task.recordedAt =
+            previousTask?.recordedAt ||
+            (task.result !== "pending" ? new Date().toISOString() : "");
+          if (!state.taskCards.some((c) => c.id === task.cardId))
+            throw new HttpError(400, "Task card no longer exists.");
+          if (
+            task.supervisorId &&
+            !state.workers.some((w) => w.id === task.supervisorId)
+          )
+            throw new HttpError(400, "Supervisor no longer exists.");
+          if (task.jobId && !state.jobs.some((j) => j.id === task.jobId))
+            throw new HttpError(400, "Job no longer exists.");
+          if (
+            ["partial", "not-done"].includes(task.result) &&
+            !task.note.trim()
+          )
+            throw new HttpError(400, "Explain partial or unfinished work.");
+        }
+        const previous = old?.crew.find((r) => r.workerId === row.workerId);
+        const brief = renderBrief(row, record, state);
+        if (changed) {
+          row.status = "draft";
+          row.brief = "";
+          row.confirmedAt = "";
+        }
+        // Closeout remains possible after card/roster changes; sending and confirming require current clearance.
+        if (
+          row.status !== "draft" &&
+          (!previous ||
+            row.status !== previous.status ||
+            row.brief !== previous.brief)
+        ) {
+          const problems = rowProblems(row, state, record);
+          if (problems.length) throw new HttpError(400, problems.join("; "));
+          if (containsMoney(brief))
+            throw new HttpError(
+              400,
+              "Remove money or pricing references from worker-facing instructions before sharing.",
+            );
+          if (row.status === "confirmed") {
+            if (previous?.status !== "sent" || previous.brief !== brief)
+              throw new HttpError(
+                400,
+                "Send the current brief before recording confirmation.",
+              );
+            row.confirmedAt = new Date().toISOString();
+          } else row.confirmedAt = "";
+          row.brief = brief;
+        } else if (row.status === "draft") {
+          row.brief = "";
+          row.confirmedAt = "";
+        } else {
+          row.brief = previous.brief;
+          row.confirmedAt = previous.confirmedAt;
+        }
+      }
+      // Never silently remove recorded work history while revising a plan.
+      for (const row of old?.crew || [])
+        for (const task of row.tasks) {
+          if (
+            (task.result !== "pending" || task.recordedAt) &&
+            !record.crew.some(
+              (r) =>
+                r.workerId === row.workerId &&
+                r.tasks.some(
+                  (t) =>
+                    t.id === task.id &&
+                    t.jobId === task.jobId &&
+                    t.cardId === task.cardId,
+                ),
+            )
+          )
+            throw new HttpError(
+              409,
+              "Keep completed assignments in their original job and worker history.",
+            );
+        }
+    }
     if (collection === "dailySheets" && record.status === "reviewed") {
       if (!record.date || !record.jobId)
         throw new HttpError(
@@ -694,7 +942,36 @@ export function createStoreFromDatabase(db) {
         "This record changed elsewhere. Refresh before deleting.",
         { current: old },
       );
+    if (["crewDays", "trailerChecks"].includes(collection))
+      throw new HttpError(
+        409,
+        "Keep operations records for history. Edit corrections instead.",
+      );
+    if (
+      ["workers", "taskCards"].includes(collection) &&
+      getRecords("crewDays").some((d) =>
+        d.crew.some((r) =>
+          collection === "workers"
+            ? r.workerId === recordId ||
+              r.tasks.some((t) => t.supervisorId === recordId)
+            : r.tasks.some((t) => t.cardId === recordId),
+        ),
+      )
+    )
+      throw new HttpError(
+        409,
+        "This record is used in crew history. Keep it and update its status.",
+      );
     if (collection === "jobs") {
+      if (
+        getRecords("crewDays").some((d) =>
+          d.crew.some((r) => r.tasks.some((t) => t.jobId === recordId)),
+        )
+      )
+        throw new HttpError(
+          409,
+          "This job is used in crew history. Cancel it instead.",
+        );
       const linked = [
         "dailySheets",
         "loadChecks",
@@ -814,6 +1091,12 @@ export function createStoreFromDatabase(db) {
     });
     const collections = {};
     for (const name of Object.keys(recordSchemas)) {
+      // Backups from before crew operations have no entries for the new collections.
+      if (
+        input[name] === undefined &&
+        ["workers", "taskCards", "crewDays", "trailerChecks"].includes(name)
+      )
+        input[name] = [];
       if (!Array.isArray(input[name]) || input[name].length > 50000)
         throw new HttpError(400, `Invalid ${name} records in backup.`);
       collections[name] = input[name].map((row) =>
@@ -849,6 +1132,34 @@ export function createStoreFromDatabase(db) {
       for (const line of row.materials)
         if (!inventoryIds.has(line.inventoryId))
           throw new HttpError(400, "Backup has a missing inventory reference.");
+    const workerIds = new Set(collections.workers.map((w) => w.id));
+    const cardIds = new Set(collections.taskCards.map((c) => c.id));
+    if (
+      new Set(collections.crewDays.map((d) => d.date)).size !==
+      collections.crewDays.length
+    )
+      throw new HttpError(400, "Backup has duplicate day plans.");
+    for (const day of collections.crewDays) {
+      if (new Set(day.crew.map((r) => r.workerId)).size !== day.crew.length)
+        throw new HttpError(400, "Backup has duplicate crew members.");
+      for (const row of day.crew) {
+        if (
+          !workerIds.has(row.workerId) ||
+          new Set(row.tasks.map((t) => t.id)).size !== row.tasks.length
+        )
+          throw new HttpError(400, "Backup has invalid crew assignments.");
+        for (const task of row.tasks)
+          if (
+            !cardIds.has(task.cardId) ||
+            (task.jobId && !jobIds.has(task.jobId)) ||
+            (task.supervisorId && !workerIds.has(task.supervisorId))
+          )
+            throw new HttpError(
+              400,
+              "Backup has a missing crew task reference.",
+            );
+      }
+    }
     const ledgerKeys = new Set();
     for (const entry of ledger) {
       const key = `${entry.sheet_id}/${entry.inventory_id}`;

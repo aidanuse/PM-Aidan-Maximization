@@ -1,0 +1,272 @@
+[
+  {
+    "code": "FLOOR-FRONT",
+    "zone": "FLOOR",
+    "item": "Generator — fuel cap accessible, never buried",
+    "label": "GENERATOR"
+  },
+  {
+    "code": "FLOOR-L",
+    "zone": "FLOOR",
+    "item": "Red grinder + its tooling case strapped beside it",
+    "label": "RED GRINDER"
+  },
+  {
+    "code": "FLOOR-R",
+    "zone": "FLOOR",
+    "item": "Large vacuum(s)",
+    "label": "VACUUM — LARGE"
+  },
+  {
+    "code": "FLOOR-DOOR",
+    "zone": "FLOOR",
+    "item": "First-out staging area (tape outline)",
+    "label": "FIRST OUT"
+  },
+  {
+    "code": "GRIND-1",
+    "zone": "GRIND",
+    "item": "DeWalt hand grinders — one box per grinder, cord wrapped, guard on",
+    "label": "HAND GRINDER — DEWALT"
+  },
+  {
+    "code": "GRIND-2",
+    "zone": "GRIND",
+    "item": "Diamonds 16 grit + 30 grit — separate boxes",
+    "label": "DIAMONDS 16 / DIAMONDS 30"
+  },
+  {
+    "code": "GRIND-3",
+    "zone": "GRIND",
+    "item": "Diamonds 60 grit + 80 grit — separate boxes; PCD box",
+    "label": "DIAMONDS 60 / DIAMONDS 80 / PCD"
+  },
+  {
+    "code": "GRIND-4",
+    "zone": "GRIND",
+    "item": "Scrapers + spare blades; hammer drill + bits",
+    "label": "SCRAPERS / HAMMER DRILL"
+  },
+  {
+    "code": "VAC-2",
+    "zone": "VAC-POWER",
+    "item": "Vacuum garbage bags + clean spare filters",
+    "label": "VAC BAGS — RIGID / G22 (say which)"
+  },
+  {
+    "code": "VAC-3",
+    "zone": "VAC-POWER",
+    "item": "Extension cords — separate bins BY LENGTH, coiled the standard way",
+    "label": "CORDS — [length]"
+  },
+  {
+    "code": "VAC-4",
+    "zone": "VAC-POWER",
+    "item": "Power splitters/adapters; work lights + stands",
+    "label": "SPLITTERS / LIGHTS"
+  },
+  {
+    "code": "COAT-1",
+    "zone": "COAT",
+    "item": "PE-100 epoxy — Part A + Part B together",
+    "label": "PE-100 — A / B"
+  },
+  {
+    "code": "COAT-2",
+    "zone": "COAT",
+    "item": "PE-VRM (MVB) — A + B together",
+    "label": "PE-VRM — A / B"
+  },
+  {
+    "code": "COAT-3",
+    "zone": "COAT",
+    "item": "LABPOX Fast Cure / fast-cure MVB — A + B together",
+    "label": "LABPOX FC — A / B"
+  },
+  {
+    "code": "COAT-4",
+    "zone": "COAT",
+    "item": "PP-S85 polyaspartic topcoat — A + B together",
+    "label": "PP-S85 — A / B"
+  },
+  {
+    "code": "COAT-5",
+    "zone": "COAT",
+    "item": "Urethane topcoat — A + B together",
+    "label": "URETHANE — A / B"
+  },
+  {
+    "code": "COAT-6",
+    "zone": "COAT",
+    "item": "EVERFLEX 8084 — A + B together",
+    "label": "EVERFLEX 8084 — A / B"
+  },
+  {
+    "code": "COAT-7",
+    "zone": "COAT",
+    "item": "Pigments — one box per colour (incl. medium grey)",
+    "label": "PIGMENT — [colour]"
+  },
+  {
+    "code": "COAT-TRAY",
+    "zone": "COAT",
+    "item": "Leak tray under ALL resin shelves; kits upright, lids checked before travel",
+    "label": "—"
+  },
+  {
+    "code": "FLAKE-1",
+    "zone": "FLAKE",
+    "item": "Flake — Slate",
+    "label": "FLAKE — SLATE"
+  },
+  {
+    "code": "FLAKE-2",
+    "zone": "FLAKE",
+    "item": "Flake — Waxwing",
+    "label": "FLAKE — WAXWING"
+  },
+  {
+    "code": "FLAKE-3",
+    "zone": "FLAKE",
+    "item": "Flake — Pumice",
+    "label": "FLAKE — PUMICE"
+  },
+  {
+    "code": "FLAKE-4",
+    "zone": "FLAKE",
+    "item": "Flake — Schist",
+    "label": "FLAKE — SCHIST"
+  },
+  {
+    "code": "FLAKE-5",
+    "zone": "FLAKE",
+    "item": "Flake — Wombat",
+    "label": "FLAKE — WOMBAT"
+  },
+  {
+    "code": "FLAKE-6",
+    "zone": "FLAKE",
+    "item": "Flake — Carbon (+ blends in use)",
+    "label": "FLAKE — CARBON"
+  },
+  {
+    "code": "FLAKE-7",
+    "zone": "FLAKE",
+    "item": "Broadcast buckets / spreaders",
+    "label": "BROADCAST BUCKETS"
+  },
+  {
+    "code": "MIX-1",
+    "zone": "MIX",
+    "item": "Mixing drills + paddles",
+    "label": "MIX DRILLS / PADDLES"
+  },
+  {
+    "code": "MIX-2",
+    "zone": "MIX",
+    "item": "Empty mixing buckets — nested stack",
+    "label": "BUCKETS"
+  },
+  {
+    "code": "MIX-3",
+    "zone": "MIX",
+    "item": "Measuring containers, pot-life timers, stir sticks, strainers",
+    "label": "MEASURING / TIMERS"
+  },
+  {
+    "code": "APPLY-1",
+    "zone": "APPLY",
+    "item": "Notched squeegees — by size + notch",
+    "label": "SQUEEGEE NOTCHED — [size/notch]"
+  },
+  {
+    "code": "APPLY-2",
+    "zone": "APPLY",
+    "item": "Flat squeegees by size; 18in cross-roll squeegee — own marked spot",
+    "label": "SQUEEGEE FLAT — [size] / 18in CROSS ROLL"
+  },
+  {
+    "code": "APPLY-3",
+    "zone": "APPLY",
+    "item": "Roller frames 9in + 18in",
+    "label": "ROLLER FRAMES 9 / 18"
+  },
+  {
+    "code": "APPLY-4",
+    "zone": "APPLY",
+    "item": "Roller sleeves by size — sealed clean",
+    "label": "ROLLER SLEEVES — [size]"
+  },
+  {
+    "code": "APPLY-5",
+    "zone": "APPLY",
+    "item": "Brushes (chip + cutting-in separate); trowels",
+    "label": "BRUSHES / TROWELS"
+  },
+  {
+    "code": "APPLY-6",
+    "zone": "APPLY",
+    "item": "Spike shoes — pairs together",
+    "label": "SPIKE SHOES"
+  },
+  {
+    "code": "REPAIR-1",
+    "zone": "REPAIR",
+    "item": "Crack filler / patch material",
+    "label": "CRACK FILLER / PATCH — [product]"
+  },
+  {
+    "code": "REPAIR-2",
+    "zone": "REPAIR",
+    "item": "MVB patch material",
+    "label": "MVB PATCH"
+  },
+  {
+    "code": "REPAIR-3",
+    "zone": "REPAIR",
+    "item": "Ardex; silica sand — sealed bin, off the floor",
+    "label": "ARDEX / SILICA SAND"
+  },
+  {
+    "code": "CONSUME-1",
+    "zone": "CONSUME",
+    "item": "Tape (by type); masking plastic / paper",
+    "label": "TAPE / MASKING"
+  },
+  {
+    "code": "CONSUME-2",
+    "zone": "CONSUME",
+    "item": "Rags; wipes; garbage bags (site bags — NOT vacuum bags)",
+    "label": "RAGS / WIPES / SITE BAGS"
+  },
+  {
+    "code": "CONSUME-3",
+    "zone": "CONSUME",
+    "item": "Acetone; xylene — sealed, upright, in the tray",
+    "label": "ACETONE / XYLENE"
+  },
+  {
+    "code": "SAFETY-1",
+    "zone": "SAFETY",
+    "item": "Respirators by size/type + spare cartridges",
+    "label": "RESPIRATORS / CARTRIDGES"
+  },
+  {
+    "code": "SAFETY-2",
+    "zone": "SAFETY",
+    "item": "Eye goggles + glasses; hearing protection; knee pads (pairs); work gloves",
+    "label": "GOGGLES / HEARING / KNEE PADS / GLOVES"
+  },
+  {
+    "code": "SAFETY-DOOR",
+    "zone": "SAFETY",
+    "item": "First aid kit + fire extinguisher — fixed spots AT THE DOOR",
+    "label": "FIRST AID / EXTINGUISHER"
+  },
+  {
+    "code": "TEST-1",
+    "zone": "TEST",
+    "item": "Conditions grab-box: IR slab thermometer, moisture meter, hardness tester, humidity/air reader, tape measure + chalk, sticky notes + marker",
+    "label": "TEST KIT"
+  }
+]

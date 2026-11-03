@@ -411,6 +411,31 @@ function JobPlan({ job, state, onSave, onNavigate }) {
                   or document these before releasing the next phase.
                 </p>
               )}
+            <div className="field-plan-summary">
+              <strong>
+                {row.releasedBy
+                  ? `Lead release: ${row.releasedBy}`
+                  : "Next phase not released"}
+              </strong>
+              {row.releasedAt && (
+                <p>{new Date(row.releasedAt).toLocaleString()}</p>
+              )}
+              <p>
+                Save the completed phase and resolved checks first. Then record
+                the lead who inspected and released this work. Editing the phase
+                clears its release.
+              </p>
+              <Field label={`Lead releasing next phase · phase ${index + 1}`}>
+                <input
+                  maxLength={200}
+                  value={row.releasedBy || ""}
+                  onChange={(e) =>
+                    update(row.id, { releasedBy: e.target.value })
+                  }
+                  placeholder="Lead name after on-site approval"
+                />
+              </Field>
+            </div>
             <Field label={`Handover / hold reason · phase ${index + 1}`}>
               <textarea
                 maxLength={3000}

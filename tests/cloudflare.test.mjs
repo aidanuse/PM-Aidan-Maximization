@@ -99,6 +99,28 @@ test(
       403,
     );
     await login();
+    const crewCard = await call("/api/records/taskCards", "POST", {
+      id: "A1",
+      title: "TEST task",
+      instructions: "TEST instructions",
+      approved: true,
+      reviewedBy: "TEST lead",
+    });
+    assert.equal(crewCard.status, 201, JSON.stringify(crewCard.body));
+    const crewWorker = await call("/api/records/workers", "POST", {
+      id: "crew-worker",
+      name: "TEST crew",
+      clearances: { A1: "SOLO" },
+    });
+    assert.equal(crewWorker.status, 201, JSON.stringify(crewWorker.body));
+    const crewDay = await call("/api/records/crewDays", "POST", {
+      id: "crew-day",
+      date: "2026-11-03",
+      crew: [{ workerId: "crew-worker" }],
+    });
+    assert.equal(crewDay.status, 201, JSON.stringify(crewDay.body));
+    assert.equal((await call("/api/state")).body.crewDays.length, 1);
+
     const feedStatus = await call("/api/integrations/calendar/sync");
     assert.equal(feedStatus.status, 200);
     assert.equal(feedStatus.body.configured, false);

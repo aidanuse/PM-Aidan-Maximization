@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { initOneSignal, requestOneSignalPermission } from "./onesignal.js";
+import CrewOperations, { CrewMorning } from "./CrewOperations.jsx";
 import FieldPlan from "./FieldPlan.jsx";
 import { PHASES, phaseLabel, nextWorkItems } from "../shared/field-work.js";
 import {
@@ -73,6 +74,7 @@ import {
 const NAV = [
   ["today", "Overview", LayoutDashboard],
   ["daily", "Daily sheets", NotebookPen],
+  ["crew", "Crew & routine", HardHat],
   ["plan", "Field plan", ClipboardList],
   ["jobs", "Jobs", BriefcaseBusiness],
   ["inventory", "Inventory", Package],
@@ -85,6 +87,10 @@ const NAV = [
   ["settings", "Settings", Settings],
 ];
 const blankState = {
+  workers: [],
+  taskCards: [],
+  crewDays: [],
+  trailerChecks: [],
   jobs: [],
   inventory: [],
   dailySheets: [],
@@ -275,7 +281,7 @@ export default function App() {
       setState((s) => ({
         ...s,
         [collection]: [
-          ...s[collection].filter((x) => x.id !== saved.id),
+          ...(s[collection] || []).filter((x) => x.id !== saved.id),
           saved,
         ],
         _offline: true,
@@ -365,6 +371,9 @@ export default function App() {
     );
   let view;
   switch (route) {
+    case "crew":
+      view = <CrewOperations {...props} />;
+      break;
     case "plan":
       view = <FieldPlan {...props} initialJobId={planJobId} />;
       break;
@@ -727,6 +736,7 @@ function TodayView({ state, onNavigate }) {
           </Button>
         }
       />
+      <CrewMorning state={state} onNavigate={onNavigate} date={date} />
       <Card className="field-plan-summary">
         <div className="row-between">
           <div>

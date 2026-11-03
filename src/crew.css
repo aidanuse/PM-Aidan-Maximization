@@ -1,0 +1,53 @@
+.crew-view {
+  min-width: 0;
+}
+.crew-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+.crew-tick {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.4rem 0;
+}
+.crew-tick input {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+  margin-top: 0.15rem;
+}
+.crew-task {
+  border: 1px solid var(--border, #d9dfe6);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.crew-task summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.crew-brief {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  line-height: 1.6;
+  padding: 1rem;
+  border: 1px solid var(--border, #d9dfe6);
+  max-height: 65vh;
+  overflow: auto;
+}
+.crew-view textarea {
+  min-height: 90px;
+}
+.crew-guide li {
+  margin-bottom: 0.7rem;
+}
+.crew-view .field {
+  min-width: 0;
+}
+.crew-view select {
+  max-width: 100%;
+}
