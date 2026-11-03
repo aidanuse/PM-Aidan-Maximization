@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { initOneSignal, requestOneSignalPermission } from "./onesignal.js";
 import CrewOperations, { CrewMorning } from "./CrewOperations.jsx";
+import { REVIEW_ACTION } from "../shared/deferred-review.js";
 import FieldPlan from "./FieldPlan.jsx";
 import { PHASES, phaseLabel, nextWorkItems } from "../shared/field-work.js";
 import {
@@ -159,6 +160,7 @@ function localDateTime(iso) {
 }
 
 export default function App() {
+  const reviewReminderAttempted = useRef(false);
   const [auth, setAuth] = useState(null),
     [state, setState] = useState(blankState),
     [route, setRoute] = useState(
@@ -293,6 +295,34 @@ export default function App() {
     }
     return saved;
   };
+  useEffect(() => {
+    if (
+      loading ||
+      !auth?.authenticated ||
+      state._offline ||
+      reviewReminderAttempted.current
+    )
+      return;
+    if (state.actions.some((action) => action.id === REVIEW_ACTION.id)) return;
+    reviewReminderAttempted.current = true;
+    saveRecord("actions", REVIEW_ACTION)
+      .then(() => reload())
+      .catch((error) => {
+        if (error.status === 409) reload().catch(() => {});
+        else
+          toast(
+            "The deferred review reminder could not sync. Reload to retry.",
+            "warning",
+          );
+      });
+  }, [
+    loading,
+    auth?.authenticated,
+    state.actions,
+    state._offline,
+    reload,
+    toast,
+  ]);
   const onDelete = async (collection, id, version) => {
     const result = await deleteRecord(collection, id, version);
     await reload();
@@ -737,6 +767,22 @@ function TodayView({ state, onNavigate }) {
         }
       />
       <CrewMorning state={state} onNavigate={onNavigate} date={date} />
+      {state.actions.some(
+        (a) => a.id === REVIEW_ACTION.id && a.status !== "done",
+      ) && (
+        <Card className="field-plan-summary">
+          <h3>Saved for later: operations approval review</h3>
+          <p>
+            Task-card approvals, worker clearances, trailer setup and
+            improvements are saved in Action list. Current focus: TimeTree
+            connection.
+          </p>
+          <Button onClick={() => onNavigate("actions")}>
+            Open saved review reminder
+          </Button>
+        </Card>
+      )}
+
       <Card className="field-plan-summary">
         <div className="row-between">
           <div>
