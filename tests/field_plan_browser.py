@@ -43,7 +43,7 @@ with tempfile.TemporaryDirectory(prefix="hardbond-plan-") as data:
                 page.goto(base + "/?view=calendar")
                 expect(page.get_by_role("heading",name="Automatic calendar feed",exact=True)).to_be_visible()
                 expect(page.get_by_text("Feed not configured",exact=True)).to_be_visible()
-                page.get_by_role("button",name="Refresh TimeTree",exact=True).click()
+                page.get_by_role("button",name="Refresh calendar feed",exact=True).click()
                 expect(page.get_by_role("alert")).to_contain_text("TimeTree is not connected")
                 page.goto(base + "/?view=plan")
                 page.get_by_text("Plan material quantities · optional", exact=True).click()

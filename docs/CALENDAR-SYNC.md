@@ -6,7 +6,7 @@ HARDBOND can poll **one supported private HTTPS iCalendar subscription** every f
 
 1. Establish that the source calendar provides an automatically updated HTTPS `.ics` subscription. The response must be a VCALENDAR, not a sign-in page. HARDBOND does not sign in to TimeTree or scrape its website.
 2. In the **existing Cloudflare Worker**, add the runtime secret `TIMETREE_FEED_URL` with that private subscription URL. Apply/deploy the secret change. Do not paste private feed tokens into chat, source control, or ordinary public variables. Node development can supply the same variable privately in its process environment.
-3. Open HARDBOND **Calendar → Automatic calendar feed**. It starts paused. Click **Refresh TimeTree** and review the timestamps, counts, conflicts and warnings. This action reads the configured feed; it does not authenticate to or scrape a private webpage. An unconfigured connection or overlapping manual refresh returns an explicit error instead of success.
+3. Open HARDBOND **Calendar → Automatic calendar feed**. It starts paused. Click **Refresh calendar feed** and review the timestamps, counts, conflicts and warnings. This action reads the configured feed; it does not authenticate to or scrape a private webpage. An unconfigured connection or overlapping manual refresh returns an explicit error instead of success.
 4. Enable automatic checks after the source and result are correct. This polls every five minutes; provider refresh schedules and Cron timing add latency. It is not instant delivery.
 
 The app's outgoing calendar subscription is a different feature: it sends HARDBOND dates to a phone. Do not configure that as the incoming feed, which would create a loop. A supported source feed must be independently supplied.
@@ -28,3 +28,11 @@ No source calendar is written to. No genuine TimeTree access or real feed has be
 ## Validation
 
 `npm test` covers polling, pause/throttle, persistent state, concurrent leases, duplicate prevention, local-field preservation, conflicting edits, provider failures/redirects, invalid calendars, backup restoration and cancellation/recurrence warnings. Cloudflare tests cover the authenticated status/pause/manual routes with the actual local runtime; browser tests cover the unconfigured setup state. Live operation still requires a real supported subscription.
+
+## Windows sign-in connection (setup stage)
+
+Calendar → TimeTree via Windows provides owner-only pairing, online/offline status, manual connection checks, pause/resume of five-minute checks, and revocation. The helper under `tools/timetree-connection` keeps TimeTree login data on Windows; its separate scoped key is hashed on HARDBOND and stored using Windows DPAPI locally. Only schema diagnostics (field names/types/counts) are uploaded. Owner jobs and settings are inaccessible with this key.
+
+**This stage does not import TimeTree events.** Event mapping, calendar filtering, timestamps and date coverage await signed-in diagnostics. Do not interpret an online PC or observed event response as successful event synchronization. The existing supported-feed path remains independent. Windows must stay awake with the helper running; startup is manual, and expired TimeTree sessions require sign-in again. Keys and connector status are not included in portable backups. Disconnecting HARDBOND does not log out of TimeTree.
+
+Run `node --test tests/timetree-bridge.test.js` and `python tests/timetree_bridge_browser.py` after building. Set `HARDBOND_BROWSER_RUNTIME=cloudflare` to exercise the same mobile/pairing flow in the local Cloudflare runtime. A real Windows/TimeTree login remains a user-side setup step, not a tested production connection.

@@ -196,7 +196,19 @@ export async function createApp(options = {}) {
     res.clearCookie(cookieName, cookieOptions).json({ authenticated: false });
   });
   registerCalendarFeed(app, { store, requireAuth, env });
-  app.use("/api", requireAuth);
+  app.use("/api", (req, res, next) => {
+    // These two connector endpoints enforce their own narrowly scoped bearer key.
+    // All owner records and controls still require the normal owner session.
+    if (
+      req.method === "POST" &&
+      [
+        "/integrations/timetree-bridge/poll",
+        "/integrations/timetree-bridge/result",
+      ].includes(req.path)
+    )
+      return next();
+    return requireAuth(req, res, next);
+  });
   app.get("/api/state", (_req, res) =>
     res.json({ ...store.state(), integrations: {} }),
   );

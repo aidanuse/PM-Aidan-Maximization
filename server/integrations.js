@@ -5,6 +5,10 @@ import ICAL from "ical.js";
 import webpush from "web-push";
 import { pushFailureDetail } from "./push-errors.js";
 import { createOneSignalSender } from "./onesignal.js";
+import {
+  createTimeTreeBridge,
+  registerTimeTreeBridge,
+} from "./timetree-bridge.js";
 import { createCalendarFeedSync } from "./calendar-sync.js";
 
 const FIELD_LABELS = {
@@ -316,6 +320,7 @@ export function createIntegrationService(context, options = {}) {
   db.exec(
     "CREATE TABLE IF NOT EXISTS integration_calendar_job_baselines (source_key TEXT PRIMARY KEY, snapshot TEXT NOT NULL)",
   );
+  const timeTreeBridge = createTimeTreeBridge({ db, now });
   const calendarSync = createCalendarFeedSync({
     db,
     env,
@@ -706,6 +711,7 @@ export function createIntegrationService(context, options = {}) {
   return {
     status,
     calendarSync,
+    timeTreeBridge,
     preview,
     runOnce,
     vapid,
@@ -1154,6 +1160,7 @@ export function exportCalendar(records, id) {
 export function registerIntegrations(app, context, options = {}) {
   const service = options.service || createIntegrationService(context);
   const auth = context.requireAuth;
+  registerTimeTreeBridge(app, service.timeTreeBridge, auth);
   const route = (handler) => async (req, res, next) => {
     try {
       await handler(req, res);
