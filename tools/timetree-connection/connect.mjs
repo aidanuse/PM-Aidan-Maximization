@@ -58,7 +58,7 @@ try {
   await bridge.poll(); // Verify pairing before launching a browser or collecting diagnostics.
   context = await chromium.launchPersistentContext(
     join(folder, "browser-profile"),
-    { headless: false, viewport: null },
+    { headless: false, viewport: null, ...(process.env.HARDBOND_BROWSER_CHANNEL === "msedge" ? {channel: "msedge"} : {}) },
   );
   context.on("close", () => {
     stopping = true;

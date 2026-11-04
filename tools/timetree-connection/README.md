@@ -14,3 +14,5 @@ The PC must stay awake and online with this helper running. After a restart, run
 The pairing key is stored using Windows DPAPI for your Windows account. The browser profile remains local under `%LOCALAPPDATA%\HardbondTimeTree\browser-profile`. Do not share that folder. Disconnect Windows PC revokes access to HARDBOND, but does not log you out of TimeTree. To remove the local TimeTree session, sign out in that browser and close it; delete the profile folder if desired.
 
 Only use your own authorized calendar. This setup does not bypass login challenges. No TimeTree password or login cookies are sent to HARDBOND. Connection reports cannot establish full calendar completeness or successful event sync.
+
+The Windows launcher uses installed Microsoft Edge when found in a standard installation location, skipping the Chromium download. Edge opens with the connector’s separate local browser profile. If Edge is absent, the launcher installs Chromium.

@@ -20,9 +20,18 @@ if errorlevel 1 goto oldnode
 echo Installing setup dependencies...
 call npm.cmd ci --no-audit --no-fund
 if errorlevel 1 goto failed
+set "HARDBOND_BROWSER_CHANNEL="
+if exist "%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe" set "HARDBOND_BROWSER_CHANNEL=msedge"
+if exist "%ProgramFiles%\Microsoft\Edge\Application\msedge.exe" set "HARDBOND_BROWSER_CHANNEL=msedge"
+if exist "%LOCALAPPDATA%\Microsoft\Edge\Application\msedge.exe" set "HARDBOND_BROWSER_CHANNEL=msedge"
+if defined HARDBOND_BROWSER_CHANNEL goto edgefound
 echo Installing the calendar browser...
 call npx.cmd playwright install chromium
 if errorlevel 1 goto failed
+goto starthelper
+:edgefound
+echo Using installed Microsoft Edge. No Chromium download needed.
+:starthelper
 echo Starting connection setup...
 node.exe connect.mjs
 if errorlevel 1 goto failed
