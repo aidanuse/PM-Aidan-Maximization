@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import {
-  planSignature,
+  confirmationAffected,
   rowProblems,
   renderBrief,
   containsMoney,
@@ -800,7 +800,7 @@ export function createStoreFromDatabase(db) {
         taskCards: getRecords("taskCards"),
         jobs: getRecords("jobs"),
       };
-      const changed = old && planSignature(old) !== planSignature(record);
+
       for (const row of record.crew) {
         if (!state.workers.some((w) => w.id === row.workerId))
           throw new HttpError(400, "Worker no longer exists.");
@@ -830,7 +830,7 @@ export function createStoreFromDatabase(db) {
         }
         const previous = old?.crew.find((r) => r.workerId === row.workerId);
         const brief = renderBrief(row, record, state);
-        if (changed) {
+        if (confirmationAffected(old, record, row.workerId)) {
           row.status = "draft";
           row.brief = "";
           row.confirmedAt = "";

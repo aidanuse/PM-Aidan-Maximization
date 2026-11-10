@@ -3,6 +3,7 @@ import { Button, Card, Field, Badge, SectionHead } from "./ui.jsx";
 import library from "../shared/task-library.json";
 import trailerMap from "../shared/trailer-map.json";
 import {
+  confirmationAffected,
   PRESETS,
   TRAILER_CHECKS,
   clearance,
@@ -498,12 +499,16 @@ function DayPlan({ state, save, busy, setDirty }) {
       structural
         ? {
             ...next,
-            crew: next.crew.map((r) => ({
-              ...r,
-              status: "draft",
-              brief: "",
-              confirmedAt: "",
-            })),
+            crew: next.crew.map((r) =>
+              confirmationAffected(day, next, r.workerId)
+                ? {
+                    ...r,
+                    status: "draft",
+                    brief: "",
+                    confirmedAt: "",
+                  }
+                : r,
+            ),
           }
         : next,
     );
@@ -575,9 +580,10 @@ function DayPlan({ state, save, busy, setDirty }) {
           maxLength={500}
         />
         <p>
-          Changes to the plan reset confirmations. Save the plan before sharing.
-          Availability and supervisor coverage are checked by you for this date
-          and job.
+          Changes reset only affected workers and helpers relying on changed
+          supervisors. Shared date or lead-contact changes reset everyone. Save
+          before sharing. Availability and supervisor coverage are checked by
+          you for this date and job.
         </p>
         <div className="crew-tabs">
           <Select

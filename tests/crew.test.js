@@ -250,3 +250,61 @@ test("recorded assignment history survives resetting a result to pending", (t) =
   assert.ok(d.crew[0].tasks[0].recordedAt);
   assert.throws(() => s.saveRecord("crewDays", { ...d, crew: [] }), /history/);
 });
+
+test("worker edits preserve unrelated confirmations; shared changes reset everyone", (t) => {
+  const s = setup(t);
+  s.saveRecord("workers", {
+    id: "second",
+    name: "Second",
+    clearances: { A4: "SOLO" },
+  });
+  let input = day();
+  input.crew.push({
+    ...input.crew[0],
+    workerId: "second",
+    tasks: input.crew[0].tasks.map((x) => ({ ...x, id: "second-task" })),
+  });
+  let d = status(s, s.saveRecord("crewDays", input), "sent");
+  d = status(s, d, "confirmed");
+  const stamp = d.crew[1].confirmedAt,
+    brief = d.crew[1].brief;
+  d = s.saveRecord("crewDays", {
+    ...d,
+    crew: d.crew.map((r, i) => (i === 0 ? { ...r, callTime: "09:00" } : r)),
+  });
+  assert.equal(d.crew[0].status, "draft");
+  assert.equal(d.crew[1].status, "confirmed");
+  assert.equal(d.crew[1].confirmedAt, stamp);
+  assert.equal(d.crew[1].brief, brief);
+  d = s.saveRecord("crewDays", { ...d, leadContact: "Changed lead" });
+  assert.ok(d.crew.every((r) => r.status === "draft" && !r.confirmedAt));
+});
+
+test("supervisor changes affect assigned helpers but results and crew ordering do not", async () => {
+  const { confirmationAffected } = await import("../shared/crew.js");
+  const before = {
+    ...day(),
+    crew: [
+      {
+        ...day().crew[0],
+        workerId: "helper",
+        tasks: [{ ...day().crew[0].tasks[0], supervisorId: "lead" }],
+      },
+      { ...day().crew[0], workerId: "lead" },
+      { ...day().crew[0], workerId: "other" },
+    ],
+  };
+  const moved = structuredClone(before);
+  moved.crew[1].callTime = "10:00";
+  assert.equal(confirmationAffected(before, moved, "helper"), true);
+  assert.equal(confirmationAffected(before, moved, "other"), false);
+  const closeout = structuredClone(before);
+  closeout.crew[1].tasks[0].result = "done";
+  closeout.crew.reverse();
+  assert.equal(confirmationAffected(before, closeout, "helper"), false);
+  const removed = {
+    ...before,
+    crew: before.crew.filter((r) => r.workerId !== "lead"),
+  };
+  assert.equal(confirmationAffected(before, removed, "helper"), true);
+});

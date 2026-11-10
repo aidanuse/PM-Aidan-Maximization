@@ -152,3 +152,25 @@ export function morningStatus(state, date) {
     return problems.length ? [`${name}: ${problems.join("; ")}`] : [];
   });
 }
+
+// Only operational changes affect acknowledgements; closeout results do not.
+export function confirmationAffected(before, after, workerId) {
+  if (!before) return false;
+  const previous = before.crew.find((r) => r.workerId === workerId);
+  const current = after.crew.find((r) => r.workerId === workerId);
+  if (!previous || !current) return true;
+  const own = (day, row) => planSignature({ ...day, crew: [row] });
+  if (own(before, previous) !== own(after, current)) return true;
+  // Supervision coverage must be reassessed when the supervisor's plan changes.
+  return current.tasks.some((task) => {
+    if (!task.supervisorId) return false;
+    const oldSupervisor = before.crew.find(
+      (r) => r.workerId === task.supervisorId,
+    );
+    const newSupervisor = after.crew.find(
+      (r) => r.workerId === task.supervisorId,
+    );
+    if (!oldSupervisor || !newSupervisor) return true;
+    return own(before, oldSupervisor) !== own(after, newSupervisor);
+  });
+}
